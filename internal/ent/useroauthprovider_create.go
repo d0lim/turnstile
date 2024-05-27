@@ -37,6 +37,12 @@ func (uopc *UserOauthProviderCreate) SetOauthUserID(s string) *UserOauthProvider
 	return uopc
 }
 
+// SetID sets the "id" field.
+func (uopc *UserOauthProviderCreate) SetID(i int64) *UserOauthProviderCreate {
+	uopc.mutation.SetID(i)
+	return uopc
+}
+
 // Mutation returns the UserOauthProviderMutation object of the builder.
 func (uopc *UserOauthProviderCreate) Mutation() *UserOauthProviderMutation {
 	return uopc.mutation
@@ -104,8 +110,10 @@ func (uopc *UserOauthProviderCreate) sqlSave(ctx context.Context) (*UserOauthPro
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	uopc.mutation.id = &_node.ID
 	uopc.mutation.done = true
 	return _node, nil
@@ -114,8 +122,12 @@ func (uopc *UserOauthProviderCreate) sqlSave(ctx context.Context) (*UserOauthPro
 func (uopc *UserOauthProviderCreate) createSpec() (*UserOauthProvider, *sqlgraph.CreateSpec) {
 	var (
 		_node = &UserOauthProvider{config: uopc.config}
-		_spec = sqlgraph.NewCreateSpec(useroauthprovider.Table, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(useroauthprovider.Table, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt64))
 	)
+	if id, ok := uopc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := uopc.mutation.UserID(); ok {
 		_spec.SetField(useroauthprovider.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
@@ -175,9 +187,9 @@ func (uopcb *UserOauthProviderCreateBulk) Save(ctx context.Context) ([]*UserOaut
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

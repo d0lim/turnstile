@@ -11,7 +11,7 @@ import (
 var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
@@ -26,7 +26,7 @@ var (
 	}
 	// UserOauthProvidersColumns holds the columns for the "user_oauth_providers" table.
 	UserOauthProvidersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "oauth_provider", Type: field.TypeString},
 		{Name: "oauth_user_id", Type: field.TypeString},

@@ -15,7 +15,7 @@ import (
 type UserOauthProvider struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID int64 `json:"user_id,omitempty"`
 	// OauthProvider holds the value of the "oauth_provider" field.
@@ -54,7 +54,7 @@ func (uop *UserOauthProvider) assignValues(columns []string, values []any) error
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			uop.ID = int(value.Int64)
+			uop.ID = int64(value.Int64)
 		case useroauthprovider.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])

@@ -127,7 +127,7 @@ func (uopu *UserOauthProviderUpdate) sqlSave(ctx context.Context) (n int, err er
 	if err := uopu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt64))
 	if ps := uopu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -280,7 +280,7 @@ func (uopuo *UserOauthProviderUpdateOne) sqlSave(ctx context.Context) (_node *Us
 	if err := uopuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt64))
 	id, ok := uopuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "UserOauthProvider.id" for update`)}

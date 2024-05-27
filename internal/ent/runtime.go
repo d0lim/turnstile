@@ -30,17 +30,17 @@ func init() {
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[0].Descriptor()
+	userDescEmail := userFields[1].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
 	useroauthproviderFields := schema.UserOauthProvider{}.Fields()
 	_ = useroauthproviderFields
 	// useroauthproviderDescOauthProvider is the schema descriptor for oauth_provider field.
-	useroauthproviderDescOauthProvider := useroauthproviderFields[1].Descriptor()
+	useroauthproviderDescOauthProvider := useroauthproviderFields[2].Descriptor()
 	// useroauthprovider.OauthProviderValidator is a validator for the "oauth_provider" field. It is called by the builders before save.
 	useroauthprovider.OauthProviderValidator = useroauthproviderDescOauthProvider.Validators[0].(func(string) error)
 	// useroauthproviderDescOauthUserID is the schema descriptor for oauth_user_id field.
-	useroauthproviderDescOauthUserID := useroauthproviderFields[2].Descriptor()
+	useroauthproviderDescOauthUserID := useroauthproviderFields[3].Descriptor()
 	// useroauthprovider.OauthUserIDValidator is a validator for the "oauth_user_id" field. It is called by the builders before save.
 	useroauthprovider.OauthUserIDValidator = useroauthproviderDescOauthUserID.Validators[0].(func(string) error)
 }

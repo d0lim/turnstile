@@ -81,8 +81,8 @@ func (uopq *UserOauthProviderQuery) FirstX(ctx context.Context) *UserOauthProvid
 
 // FirstID returns the first UserOauthProvider ID from the query.
 // Returns a *NotFoundError when no UserOauthProvider ID was found.
-func (uopq *UserOauthProviderQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (uopq *UserOauthProviderQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = uopq.Limit(1).IDs(setContextOp(ctx, uopq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +94,7 @@ func (uopq *UserOauthProviderQuery) FirstID(ctx context.Context) (id int, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (uopq *UserOauthProviderQuery) FirstIDX(ctx context.Context) int {
+func (uopq *UserOauthProviderQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := uopq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +132,8 @@ func (uopq *UserOauthProviderQuery) OnlyX(ctx context.Context) *UserOauthProvide
 // OnlyID is like Only, but returns the only UserOauthProvider ID in the query.
 // Returns a *NotSingularError when more than one UserOauthProvider ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (uopq *UserOauthProviderQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (uopq *UserOauthProviderQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = uopq.Limit(2).IDs(setContextOp(ctx, uopq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +149,7 @@ func (uopq *UserOauthProviderQuery) OnlyID(ctx context.Context) (id int, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (uopq *UserOauthProviderQuery) OnlyIDX(ctx context.Context) int {
+func (uopq *UserOauthProviderQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := uopq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +177,7 @@ func (uopq *UserOauthProviderQuery) AllX(ctx context.Context) []*UserOauthProvid
 }
 
 // IDs executes the query and returns a list of UserOauthProvider IDs.
-func (uopq *UserOauthProviderQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (uopq *UserOauthProviderQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if uopq.ctx.Unique == nil && uopq.path != nil {
 		uopq.Unique(true)
 	}
@@ -189,7 +189,7 @@ func (uopq *UserOauthProviderQuery) IDs(ctx context.Context) (ids []int, err err
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (uopq *UserOauthProviderQuery) IDsX(ctx context.Context) []int {
+func (uopq *UserOauthProviderQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := uopq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +364,7 @@ func (uopq *UserOauthProviderQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (uopq *UserOauthProviderQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(useroauthprovider.Table, useroauthprovider.Columns, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt64))
 	_spec.From = uopq.sql
 	if unique := uopq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

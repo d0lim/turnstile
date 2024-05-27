@@ -40,7 +40,7 @@ func (uopd *UserOauthProviderDelete) ExecX(ctx context.Context) int {
 }
 
 func (uopd *UserOauthProviderDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(useroauthprovider.Table, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(useroauthprovider.Table, sqlgraph.NewFieldSpec(useroauthprovider.FieldID, field.TypeInt64))
 	if ps := uopd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
