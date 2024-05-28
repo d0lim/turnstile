@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/d0lim/turnstile/internal/ent/user"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/user"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 // ent aliases to avoid import conflicts in user's code.

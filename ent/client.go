@@ -9,13 +9,13 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/d0lim/turnstile/internal/ent/migrate"
+	"github.com/d0lim/turnstile/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/d0lim/turnstile/internal/ent/user"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/user"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 
 	stdsql "database/sql"
 )
@@ -318,7 +318,8 @@ func (c *UserClient) GetX(ctx context.Context, id int64) *User {
 
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
-	return c.hooks.User
+	hooks := c.hooks.User
+	return append(hooks[:len(hooks):len(hooks)], user.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.

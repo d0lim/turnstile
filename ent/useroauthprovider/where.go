@@ -4,7 +4,7 @@ package useroauthprovider
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/d0lim/turnstile/internal/ent/predicate"
+	"github.com/d0lim/turnstile/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

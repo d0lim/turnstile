@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 // UserOauthProviderCreate is the builder for creating a UserOauthProvider entity.

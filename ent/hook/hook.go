@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/d0lim/turnstile/internal/ent"
+	"github.com/d0lim/turnstile/ent"
 )
 
 // The UserFunc type is an adapter to allow the use of ordinary

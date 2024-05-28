@@ -1,11 +1,11 @@
-package ent
+package db
 
 import (
 	"context"
+	"github.com/d0lim/turnstile/ent"
+	"github.com/d0lim/turnstile/ent/user"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
-	"github.com/d0lim/turnstile/internal/ent"
-	"github.com/d0lim/turnstile/internal/ent/user"
 	"github.com/pkg/errors"
 )
 

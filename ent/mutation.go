@@ -11,9 +11,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/d0lim/turnstile/internal/ent/predicate"
-	"github.com/d0lim/turnstile/internal/ent/user"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/predicate"
+	"github.com/d0lim/turnstile/ent/user"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 const (

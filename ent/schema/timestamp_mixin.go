@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
-	"github.com/d0lim/turnstile/internal/ent/hook"
+	"github.com/d0lim/turnstile/ent/hook"
 	"time"
 )
 

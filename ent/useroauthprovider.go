@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 // UserOauthProvider is the model entity for the UserOauthProvider schema.

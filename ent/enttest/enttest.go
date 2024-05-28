@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/d0lim/turnstile/internal/ent"
+	"github.com/d0lim/turnstile/ent"
 	// required by schema hooks.
-	_ "github.com/d0lim/turnstile/internal/ent/runtime"
+	_ "github.com/d0lim/turnstile/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/d0lim/turnstile/internal/ent/migrate"
+	"github.com/d0lim/turnstile/ent/migrate"
 )
 
 type (

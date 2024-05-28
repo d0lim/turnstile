@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/d0lim/turnstile/internal/ent/predicate"
-	"github.com/d0lim/turnstile/internal/ent/useroauthprovider"
+	"github.com/d0lim/turnstile/ent/predicate"
+	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 // UserOauthProviderQuery is the builder for querying UserOauthProvider entities.

@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/d0lim/turnstile/internal/ent/user"
+	"github.com/d0lim/turnstile/ent/user"
 )
 
 // User is the model entity for the User schema.
