@@ -1,14 +1,13 @@
 //go:build wireinject
 // +build wireinject
 
-package di
+package framework
 
 import (
 	"github.com/d0lim/turnstile/internal/adapters/in/api"
 	"github.com/d0lim/turnstile/internal/adapters/out/db"
 	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
-	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/wire"
@@ -21,7 +20,7 @@ func InitializeApp() (*fiber.App, error) {
 		db.NewUserRepository,
 		usecase.NewUserUsecase,
 		api.NewUserHandler,
-		framework.NewApp,
+		NewApp,
 	)
 
 	return &fiber.App{}, nil

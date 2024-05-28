@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/d0lim/turnstile/internal/di"
+	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
@@ -13,7 +13,7 @@ func main() {
 		logrus.Fatalf("Error loading .env file")
 	}
 
-	app, err := di.InitializeApp()
+	app, err := framework.InitializeApp()
 	if err != nil {
 		panic(err)
 	}
