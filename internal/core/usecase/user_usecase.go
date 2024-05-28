@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/d0lim/turnstile/internal/user/domain"
-	"github.com/d0lim/turnstile/internal/user/repository"
+	"github.com/d0lim/turnstile/internal/core/domain"
+	"github.com/d0lim/turnstile/internal/core/repository"
 )
 
 type UserUsecase struct {

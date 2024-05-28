@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/d0lim/turnstile/internal/user/domain"
+import "github.com/d0lim/turnstile/internal/core/domain"
 
 type UserRepository interface {
 	CreateUser(account *domain.User) error
