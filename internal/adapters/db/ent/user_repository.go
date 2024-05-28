@@ -3,7 +3,7 @@ package ent
 import (
 	"context"
 	"github.com/d0lim/turnstile/internal/core/domain"
-	"github.com/d0lim/turnstile/internal/core/repository"
+	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 	"github.com/d0lim/turnstile/internal/ent"
 	"github.com/d0lim/turnstile/internal/ent/user"
 	"github.com/pkg/errors"

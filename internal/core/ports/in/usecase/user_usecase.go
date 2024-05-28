@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/d0lim/turnstile/internal/core/domain"
-	"github.com/d0lim/turnstile/internal/core/repository"
+	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 )
 
 type UserUsecase struct {
