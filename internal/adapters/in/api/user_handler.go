@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/d0lim/turnstile/internal/adapters/in/config"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
+	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/gofiber/fiber/v2"
 )
 
