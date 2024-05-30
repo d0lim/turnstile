@@ -19,9 +19,11 @@ func NewUserRepository(client *ent.Client) repository.UserRepository {
 
 func (r *userRepository) CreateUser(user *domain.User) error {
 	_, err := r.client.User.Create().
+		SetOAuthID(user.OAuthId).
+		SetOAuthProvider(user.OAuthProvider).
 		SetEmail(user.Email).
-		SetNickname(user.Nickname).
-		SetNillableProfileImageURL(nil).
+		SetName(user.Name).
+		SetNillableProfileImageURL(user.ProfileImageUrl).
 		Save(context.Background())
 	return err
 }
@@ -33,22 +35,28 @@ func (r *userRepository) GetUserByID(id int64) (*domain.User, error) {
 	}
 
 	return &domain.User{
-		ID:       a.ID,
-		Nickname: a.Nickname,
-		Email:    a.Email,
+		ID:              a.ID,
+		OAuthId:         a.OAuthID,
+		OAuthProvider:   a.OAuthProvider,
+		Email:           a.Email,
+		Name:            a.Name,
+		ProfileImageUrl: a.ProfileImageURL,
 	}, nil
 }
 
-func (r *userRepository) GetUserByEmail(email string) (*domain.User, error) {
-	u, err := r.client.User.Query().Where(user.Email(email)).Only(context.Background())
+func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string) (*domain.User, error) {
+	u, err := r.client.User.Query().Where(user.OAuthProvider(oAuthProvider), user.Email(email)).Only(context.Background())
 	if err != nil {
 		return nil, errors.Wrap(err, "getting core by Email")
 	}
 
 	return &domain.User{
-		ID:       u.ID,
-		Nickname: u.Nickname,
-		Email:    u.Email,
+		ID:              u.ID,
+		OAuthId:         u.OAuthID,
+		OAuthProvider:   u.OAuthProvider,
+		Email:           u.Email,
+		Name:            u.Name,
+		ProfileImageUrl: u.ProfileImageURL,
 	}, nil
 }
 
