@@ -244,7 +244,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := uc.mutation.ProfileImageURL(); ok {
 		_spec.SetField(user.FieldProfileImageURL, field.TypeString, value)
-		_node.ProfileImageURL = value
+		_node.ProfileImageURL = &value
 	}
 	return _node, _spec
 }
