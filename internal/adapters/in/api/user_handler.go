@@ -13,18 +13,18 @@ import (
 )
 
 type UserHandler struct {
-	oauthConfig *config.OAuthConfig
+	oAuthConfig *config.OAuthConfig
 	session     *config.SessionConfig
 	usecase     *usecase.UserUsecase
 }
 
 func NewUserHandler(
-	oauthConfig *config.OAuthConfig,
+	oAuthConfig *config.OAuthConfig,
 	session *config.SessionConfig,
 	usecase *usecase.UserUsecase,
 ) *UserHandler {
 	return &UserHandler{
-		oauthConfig: oauthConfig,
+		oAuthConfig: oAuthConfig,
 		session:     session,
 		usecase:     usecase,
 	}
@@ -42,7 +42,7 @@ func (h *UserHandler) RedirectLoginGoogle(c *fiber.Ctx) error {
 		return err
 	}
 
-	authCodeURL := h.oauthConfig.Google.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	authCodeURL := h.oAuthConfig.Google.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
 	return c.Redirect(authCodeURL, http.StatusTemporaryRedirect)
 }
@@ -59,12 +59,12 @@ func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid state")
 	}
 
-	token, err := h.oauthConfig.Google.Exchange(c.Context(), code)
+	token, err := h.oAuthConfig.Google.Exchange(c.Context(), code)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	client := h.oauthConfig.Google.Client(c.Context(), token)
+	client := h.oAuthConfig.Google.Client(c.Context(), token)
 	userInfo, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
