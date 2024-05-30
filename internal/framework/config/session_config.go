@@ -8,10 +8,10 @@ import (
 )
 
 type SessionConfig struct {
-	store *session.Store
+	Store *session.Store
 }
 
-func NewSessionStore() *SessionConfig {
+func NewSessionConfig() *SessionConfig {
 	redisStore := redis.New(redis.Config{
 		Host:     os.Getenv("REDIS_HOST"),
 		Port:     6379,
@@ -23,5 +23,5 @@ func NewSessionStore() *SessionConfig {
 		Expiration: 24 * time.Hour,
 	})
 
-	return &SessionConfig{store: sessionStore}
+	return &SessionConfig{Store: sessionStore}
 }
