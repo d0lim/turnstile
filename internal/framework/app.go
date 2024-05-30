@@ -1,6 +1,7 @@
 package framework
 
 import (
+	_ "github.com/d0lim/turnstile/ent/runtime"
 	"github.com/d0lim/turnstile/internal/adapters/in/api"
 	"github.com/gofiber/fiber/v2"
 )
