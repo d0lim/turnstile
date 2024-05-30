@@ -1,7 +1,10 @@
 package domain
 
 type User struct {
-	ID       int64
-	Nickname string
-	Email    string
+	ID              int64
+	OAuthId         string
+	OAuthProvider   string
+	Name            string
+	Email           string
+	ProfileImageUrl *string
 }
