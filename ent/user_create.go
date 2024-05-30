@@ -48,15 +48,15 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 	return uc
 }
 
-// SetOauthID sets the "oauth_id" field.
-func (uc *UserCreate) SetOauthID(s string) *UserCreate {
-	uc.mutation.SetOauthID(s)
+// SetOAuthID sets the "o_auth_id" field.
+func (uc *UserCreate) SetOAuthID(s string) *UserCreate {
+	uc.mutation.SetOAuthID(s)
 	return uc
 }
 
-// SetOauthProvider sets the "oauth_provider" field.
-func (uc *UserCreate) SetOauthProvider(s string) *UserCreate {
-	uc.mutation.SetOauthProvider(s)
+// SetOAuthProvider sets the "o_auth_provider" field.
+func (uc *UserCreate) SetOAuthProvider(s string) *UserCreate {
+	uc.mutation.SetOAuthProvider(s)
 	return uc
 }
 
@@ -154,20 +154,20 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "User.updated_at"`)}
 	}
-	if _, ok := uc.mutation.OauthID(); !ok {
-		return &ValidationError{Name: "oauth_id", err: errors.New(`ent: missing required field "User.oauth_id"`)}
+	if _, ok := uc.mutation.OAuthID(); !ok {
+		return &ValidationError{Name: "o_auth_id", err: errors.New(`ent: missing required field "User.o_auth_id"`)}
 	}
-	if v, ok := uc.mutation.OauthID(); ok {
-		if err := user.OauthIDValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_id", err: fmt.Errorf(`ent: validator failed for field "User.oauth_id": %w`, err)}
+	if v, ok := uc.mutation.OAuthID(); ok {
+		if err := user.OAuthIDValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_id", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_id": %w`, err)}
 		}
 	}
-	if _, ok := uc.mutation.OauthProvider(); !ok {
-		return &ValidationError{Name: "oauth_provider", err: errors.New(`ent: missing required field "User.oauth_provider"`)}
+	if _, ok := uc.mutation.OAuthProvider(); !ok {
+		return &ValidationError{Name: "o_auth_provider", err: errors.New(`ent: missing required field "User.o_auth_provider"`)}
 	}
-	if v, ok := uc.mutation.OauthProvider(); ok {
-		if err := user.OauthProviderValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_provider", err: fmt.Errorf(`ent: validator failed for field "User.oauth_provider": %w`, err)}
+	if v, ok := uc.mutation.OAuthProvider(); ok {
+		if err := user.OAuthProviderValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_provider", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_provider": %w`, err)}
 		}
 	}
 	if _, ok := uc.mutation.Email(); !ok {
@@ -226,13 +226,13 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := uc.mutation.OauthID(); ok {
-		_spec.SetField(user.FieldOauthID, field.TypeString, value)
-		_node.OauthID = value
+	if value, ok := uc.mutation.OAuthID(); ok {
+		_spec.SetField(user.FieldOAuthID, field.TypeString, value)
+		_node.OAuthID = value
 	}
-	if value, ok := uc.mutation.OauthProvider(); ok {
-		_spec.SetField(user.FieldOauthProvider, field.TypeString, value)
-		_node.OauthProvider = value
+	if value, ok := uc.mutation.OAuthProvider(); ok {
+		_spec.SetField(user.FieldOAuthProvider, field.TypeString, value)
+		_node.OAuthProvider = value
 	}
 	if value, ok := uc.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)

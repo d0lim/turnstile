@@ -64,14 +64,14 @@ func UpdatedAt(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// OauthID applies equality check predicate on the "oauth_id" field. It's identical to OauthIDEQ.
-func OauthID(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOauthID, v))
+// OAuthID applies equality check predicate on the "o_auth_id" field. It's identical to OAuthIDEQ.
+func OAuthID(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOAuthID, v))
 }
 
-// OauthProvider applies equality check predicate on the "oauth_provider" field. It's identical to OauthProviderEQ.
-func OauthProvider(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOauthProvider, v))
+// OAuthProvider applies equality check predicate on the "o_auth_provider" field. It's identical to OAuthProviderEQ.
+func OAuthProvider(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOAuthProvider, v))
 }
 
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
@@ -169,134 +169,134 @@ func UpdatedAtLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
-// OauthIDEQ applies the EQ predicate on the "oauth_id" field.
-func OauthIDEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOauthID, v))
+// OAuthIDEQ applies the EQ predicate on the "o_auth_id" field.
+func OAuthIDEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOAuthID, v))
 }
 
-// OauthIDNEQ applies the NEQ predicate on the "oauth_id" field.
-func OauthIDNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldOauthID, v))
+// OAuthIDNEQ applies the NEQ predicate on the "o_auth_id" field.
+func OAuthIDNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldOAuthID, v))
 }
 
-// OauthIDIn applies the In predicate on the "oauth_id" field.
-func OauthIDIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldOauthID, vs...))
+// OAuthIDIn applies the In predicate on the "o_auth_id" field.
+func OAuthIDIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldOAuthID, vs...))
 }
 
-// OauthIDNotIn applies the NotIn predicate on the "oauth_id" field.
-func OauthIDNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldOauthID, vs...))
+// OAuthIDNotIn applies the NotIn predicate on the "o_auth_id" field.
+func OAuthIDNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldOAuthID, vs...))
 }
 
-// OauthIDGT applies the GT predicate on the "oauth_id" field.
-func OauthIDGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldOauthID, v))
+// OAuthIDGT applies the GT predicate on the "o_auth_id" field.
+func OAuthIDGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldOAuthID, v))
 }
 
-// OauthIDGTE applies the GTE predicate on the "oauth_id" field.
-func OauthIDGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldOauthID, v))
+// OAuthIDGTE applies the GTE predicate on the "o_auth_id" field.
+func OAuthIDGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldOAuthID, v))
 }
 
-// OauthIDLT applies the LT predicate on the "oauth_id" field.
-func OauthIDLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldOauthID, v))
+// OAuthIDLT applies the LT predicate on the "o_auth_id" field.
+func OAuthIDLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldOAuthID, v))
 }
 
-// OauthIDLTE applies the LTE predicate on the "oauth_id" field.
-func OauthIDLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldOauthID, v))
+// OAuthIDLTE applies the LTE predicate on the "o_auth_id" field.
+func OAuthIDLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldOAuthID, v))
 }
 
-// OauthIDContains applies the Contains predicate on the "oauth_id" field.
-func OauthIDContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldOauthID, v))
+// OAuthIDContains applies the Contains predicate on the "o_auth_id" field.
+func OAuthIDContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldOAuthID, v))
 }
 
-// OauthIDHasPrefix applies the HasPrefix predicate on the "oauth_id" field.
-func OauthIDHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldOauthID, v))
+// OAuthIDHasPrefix applies the HasPrefix predicate on the "o_auth_id" field.
+func OAuthIDHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldOAuthID, v))
 }
 
-// OauthIDHasSuffix applies the HasSuffix predicate on the "oauth_id" field.
-func OauthIDHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldOauthID, v))
+// OAuthIDHasSuffix applies the HasSuffix predicate on the "o_auth_id" field.
+func OAuthIDHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldOAuthID, v))
 }
 
-// OauthIDEqualFold applies the EqualFold predicate on the "oauth_id" field.
-func OauthIDEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldOauthID, v))
+// OAuthIDEqualFold applies the EqualFold predicate on the "o_auth_id" field.
+func OAuthIDEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldOAuthID, v))
 }
 
-// OauthIDContainsFold applies the ContainsFold predicate on the "oauth_id" field.
-func OauthIDContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldOauthID, v))
+// OAuthIDContainsFold applies the ContainsFold predicate on the "o_auth_id" field.
+func OAuthIDContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldOAuthID, v))
 }
 
-// OauthProviderEQ applies the EQ predicate on the "oauth_provider" field.
-func OauthProviderEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldOauthProvider, v))
+// OAuthProviderEQ applies the EQ predicate on the "o_auth_provider" field.
+func OAuthProviderEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldOAuthProvider, v))
 }
 
-// OauthProviderNEQ applies the NEQ predicate on the "oauth_provider" field.
-func OauthProviderNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldOauthProvider, v))
+// OAuthProviderNEQ applies the NEQ predicate on the "o_auth_provider" field.
+func OAuthProviderNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldOAuthProvider, v))
 }
 
-// OauthProviderIn applies the In predicate on the "oauth_provider" field.
-func OauthProviderIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldOauthProvider, vs...))
+// OAuthProviderIn applies the In predicate on the "o_auth_provider" field.
+func OAuthProviderIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldOAuthProvider, vs...))
 }
 
-// OauthProviderNotIn applies the NotIn predicate on the "oauth_provider" field.
-func OauthProviderNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldOauthProvider, vs...))
+// OAuthProviderNotIn applies the NotIn predicate on the "o_auth_provider" field.
+func OAuthProviderNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldOAuthProvider, vs...))
 }
 
-// OauthProviderGT applies the GT predicate on the "oauth_provider" field.
-func OauthProviderGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldOauthProvider, v))
+// OAuthProviderGT applies the GT predicate on the "o_auth_provider" field.
+func OAuthProviderGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldOAuthProvider, v))
 }
 
-// OauthProviderGTE applies the GTE predicate on the "oauth_provider" field.
-func OauthProviderGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldOauthProvider, v))
+// OAuthProviderGTE applies the GTE predicate on the "o_auth_provider" field.
+func OAuthProviderGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldOAuthProvider, v))
 }
 
-// OauthProviderLT applies the LT predicate on the "oauth_provider" field.
-func OauthProviderLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldOauthProvider, v))
+// OAuthProviderLT applies the LT predicate on the "o_auth_provider" field.
+func OAuthProviderLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldOAuthProvider, v))
 }
 
-// OauthProviderLTE applies the LTE predicate on the "oauth_provider" field.
-func OauthProviderLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldOauthProvider, v))
+// OAuthProviderLTE applies the LTE predicate on the "o_auth_provider" field.
+func OAuthProviderLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldOAuthProvider, v))
 }
 
-// OauthProviderContains applies the Contains predicate on the "oauth_provider" field.
-func OauthProviderContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldOauthProvider, v))
+// OAuthProviderContains applies the Contains predicate on the "o_auth_provider" field.
+func OAuthProviderContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldOAuthProvider, v))
 }
 
-// OauthProviderHasPrefix applies the HasPrefix predicate on the "oauth_provider" field.
-func OauthProviderHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldOauthProvider, v))
+// OAuthProviderHasPrefix applies the HasPrefix predicate on the "o_auth_provider" field.
+func OAuthProviderHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldOAuthProvider, v))
 }
 
-// OauthProviderHasSuffix applies the HasSuffix predicate on the "oauth_provider" field.
-func OauthProviderHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldOauthProvider, v))
+// OAuthProviderHasSuffix applies the HasSuffix predicate on the "o_auth_provider" field.
+func OAuthProviderHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldOAuthProvider, v))
 }
 
-// OauthProviderEqualFold applies the EqualFold predicate on the "oauth_provider" field.
-func OauthProviderEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldOauthProvider, v))
+// OAuthProviderEqualFold applies the EqualFold predicate on the "o_auth_provider" field.
+func OAuthProviderEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldOAuthProvider, v))
 }
 
-// OauthProviderContainsFold applies the ContainsFold predicate on the "oauth_provider" field.
-func OauthProviderContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldOauthProvider, v))
+// OAuthProviderContainsFold applies the ContainsFold predicate on the "o_auth_provider" field.
+func OAuthProviderContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldOAuthProvider, v))
 }
 
 // EmailEQ applies the EQ predicate on the "email" field.

@@ -35,8 +35,8 @@ type UserMutation struct {
 	id                *int64
 	created_at        *time.Time
 	updated_at        *time.Time
-	oauth_id          *string
-	oauth_provider    *string
+	o_auth_id         *string
+	o_auth_provider   *string
 	email             *string
 	name              *string
 	profile_image_url *string
@@ -222,76 +222,76 @@ func (m *UserMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
-// SetOauthID sets the "oauth_id" field.
-func (m *UserMutation) SetOauthID(s string) {
-	m.oauth_id = &s
+// SetOAuthID sets the "o_auth_id" field.
+func (m *UserMutation) SetOAuthID(s string) {
+	m.o_auth_id = &s
 }
 
-// OauthID returns the value of the "oauth_id" field in the mutation.
-func (m *UserMutation) OauthID() (r string, exists bool) {
-	v := m.oauth_id
+// OAuthID returns the value of the "o_auth_id" field in the mutation.
+func (m *UserMutation) OAuthID() (r string, exists bool) {
+	v := m.o_auth_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldOauthID returns the old "oauth_id" field's value of the User entity.
+// OldOAuthID returns the old "o_auth_id" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldOauthID(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldOAuthID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOauthID is only allowed on UpdateOne operations")
+		return v, errors.New("OldOAuthID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOauthID requires an ID field in the mutation")
+		return v, errors.New("OldOAuthID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOauthID: %w", err)
+		return v, fmt.Errorf("querying old value for OldOAuthID: %w", err)
 	}
-	return oldValue.OauthID, nil
+	return oldValue.OAuthID, nil
 }
 
-// ResetOauthID resets all changes to the "oauth_id" field.
-func (m *UserMutation) ResetOauthID() {
-	m.oauth_id = nil
+// ResetOAuthID resets all changes to the "o_auth_id" field.
+func (m *UserMutation) ResetOAuthID() {
+	m.o_auth_id = nil
 }
 
-// SetOauthProvider sets the "oauth_provider" field.
-func (m *UserMutation) SetOauthProvider(s string) {
-	m.oauth_provider = &s
+// SetOAuthProvider sets the "o_auth_provider" field.
+func (m *UserMutation) SetOAuthProvider(s string) {
+	m.o_auth_provider = &s
 }
 
-// OauthProvider returns the value of the "oauth_provider" field in the mutation.
-func (m *UserMutation) OauthProvider() (r string, exists bool) {
-	v := m.oauth_provider
+// OAuthProvider returns the value of the "o_auth_provider" field in the mutation.
+func (m *UserMutation) OAuthProvider() (r string, exists bool) {
+	v := m.o_auth_provider
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldOauthProvider returns the old "oauth_provider" field's value of the User entity.
+// OldOAuthProvider returns the old "o_auth_provider" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldOauthProvider(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldOAuthProvider(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOauthProvider is only allowed on UpdateOne operations")
+		return v, errors.New("OldOAuthProvider is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOauthProvider requires an ID field in the mutation")
+		return v, errors.New("OldOAuthProvider requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOauthProvider: %w", err)
+		return v, fmt.Errorf("querying old value for OldOAuthProvider: %w", err)
 	}
-	return oldValue.OauthProvider, nil
+	return oldValue.OAuthProvider, nil
 }
 
-// ResetOauthProvider resets all changes to the "oauth_provider" field.
-func (m *UserMutation) ResetOauthProvider() {
-	m.oauth_provider = nil
+// ResetOAuthProvider resets all changes to the "o_auth_provider" field.
+func (m *UserMutation) ResetOAuthProvider() {
+	m.o_auth_provider = nil
 }
 
 // SetEmail sets the "email" field.
@@ -456,11 +456,11 @@ func (m *UserMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, user.FieldUpdatedAt)
 	}
-	if m.oauth_id != nil {
-		fields = append(fields, user.FieldOauthID)
+	if m.o_auth_id != nil {
+		fields = append(fields, user.FieldOAuthID)
 	}
-	if m.oauth_provider != nil {
-		fields = append(fields, user.FieldOauthProvider)
+	if m.o_auth_provider != nil {
+		fields = append(fields, user.FieldOAuthProvider)
 	}
 	if m.email != nil {
 		fields = append(fields, user.FieldEmail)
@@ -483,10 +483,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case user.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case user.FieldOauthID:
-		return m.OauthID()
-	case user.FieldOauthProvider:
-		return m.OauthProvider()
+	case user.FieldOAuthID:
+		return m.OAuthID()
+	case user.FieldOAuthProvider:
+		return m.OAuthProvider()
 	case user.FieldEmail:
 		return m.Email()
 	case user.FieldName:
@@ -506,10 +506,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreatedAt(ctx)
 	case user.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case user.FieldOauthID:
-		return m.OldOauthID(ctx)
-	case user.FieldOauthProvider:
-		return m.OldOauthProvider(ctx)
+	case user.FieldOAuthID:
+		return m.OldOAuthID(ctx)
+	case user.FieldOAuthProvider:
+		return m.OldOAuthProvider(ctx)
 	case user.FieldEmail:
 		return m.OldEmail(ctx)
 	case user.FieldName:
@@ -539,19 +539,19 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case user.FieldOauthID:
+	case user.FieldOAuthID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetOauthID(v)
+		m.SetOAuthID(v)
 		return nil
-	case user.FieldOauthProvider:
+	case user.FieldOAuthProvider:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetOauthProvider(v)
+		m.SetOAuthProvider(v)
 		return nil
 	case user.FieldEmail:
 		v, ok := value.(string)
@@ -638,11 +638,11 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case user.FieldOauthID:
-		m.ResetOauthID()
+	case user.FieldOAuthID:
+		m.ResetOAuthID()
 		return nil
-	case user.FieldOauthProvider:
-		m.ResetOauthProvider()
+	case user.FieldOAuthProvider:
+		m.ResetOAuthProvider()
 		return nil
 	case user.FieldEmail:
 		m.ResetEmail()
