@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 )
@@ -13,18 +14,18 @@ func NewUserUsecase(repo repository.UserRepository) *UserUsecase {
 	return &UserUsecase{repo: repo}
 }
 
-func (u *UserUsecase) CreateUser(account *domain.User) error {
-	return u.repo.CreateUser(account)
+func (u *UserUsecase) CreateUser(account *domain.User, ctx context.Context) error {
+	return u.repo.CreateUser(account, ctx)
 }
 
-func (u *UserUsecase) GetUserByID(id int64) (*domain.User, error) {
-	return u.repo.GetUserByID(id)
+func (u *UserUsecase) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
+	return u.repo.GetUserByID(id, ctx)
 }
 
-func (u *UserUsecase) GetUserByEmail(email string) (*domain.User, error) {
-	return u.repo.GetUserByEmail(email)
+func (u *UserUsecase) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error) {
+	return u.repo.GetUserByOAuthProviderAndEmail(oAuthProvider, email, ctx)
 }
 
-func (u *UserUsecase) DeleteUser(id int64) error {
-	return u.repo.DeleteUser(id)
+func (u *UserUsecase) DeleteUser(id int64, ctx context.Context) error {
+	return u.repo.DeleteUser(id, ctx)
 }
