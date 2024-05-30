@@ -30,7 +30,7 @@ type User struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// ProfileImageURL holds the value of the "profile_image_url" field.
-	ProfileImageURL string `json:"profile_image_url,omitempty"`
+	ProfileImageURL *string `json:"profile_image_url,omitempty"`
 	selectValues    sql.SelectValues
 }
 
@@ -106,7 +106,8 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field profile_image_url", values[i])
 			} else if value.Valid {
-				u.ProfileImageURL = value.String
+				u.ProfileImageURL = new(string)
+				*u.ProfileImageURL = value.String
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -162,8 +163,10 @@ func (u *User) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(u.Name)
 	builder.WriteString(", ")
-	builder.WriteString("profile_image_url=")
-	builder.WriteString(u.ProfileImageURL)
+	if v := u.ProfileImageURL; v != nil {
+		builder.WriteString("profile_image_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

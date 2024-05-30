@@ -20,7 +20,7 @@ func (User) Fields() []ent.Field {
 		field.String("o_auth_provider").NotEmpty(),
 		field.String("email").NotEmpty(),
 		field.String("name").NotEmpty(),
-		field.String("profile_image_url").Optional(),
+		field.String("profile_image_url").Optional().Nillable(),
 	}
 }
 
