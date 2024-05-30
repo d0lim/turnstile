@@ -34,6 +34,34 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
+// SetOauthID sets the "oauth_id" field.
+func (uu *UserUpdate) SetOauthID(s string) *UserUpdate {
+	uu.mutation.SetOauthID(s)
+	return uu
+}
+
+// SetNillableOauthID sets the "oauth_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOauthID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetOauthID(*s)
+	}
+	return uu
+}
+
+// SetOauthProvider sets the "oauth_provider" field.
+func (uu *UserUpdate) SetOauthProvider(s string) *UserUpdate {
+	uu.mutation.SetOauthProvider(s)
+	return uu
+}
+
+// SetNillableOauthProvider sets the "oauth_provider" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOauthProvider(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetOauthProvider(*s)
+	}
+	return uu
+}
+
 // SetEmail sets the "email" field.
 func (uu *UserUpdate) SetEmail(s string) *UserUpdate {
 	uu.mutation.SetEmail(s)
@@ -48,23 +76,17 @@ func (uu *UserUpdate) SetNillableEmail(s *string) *UserUpdate {
 	return uu
 }
 
-// SetNickname sets the "nickname" field.
-func (uu *UserUpdate) SetNickname(s string) *UserUpdate {
-	uu.mutation.SetNickname(s)
+// SetName sets the "name" field.
+func (uu *UserUpdate) SetName(s string) *UserUpdate {
+	uu.mutation.SetName(s)
 	return uu
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableNickname(s *string) *UserUpdate {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableName(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetNickname(*s)
+		uu.SetName(*s)
 	}
-	return uu
-}
-
-// ClearNickname clears the value of the "nickname" field.
-func (uu *UserUpdate) ClearNickname() *UserUpdate {
-	uu.mutation.ClearNickname()
 	return uu
 }
 
@@ -137,9 +159,24 @@ func (uu *UserUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (uu *UserUpdate) check() error {
+	if v, ok := uu.mutation.OauthID(); ok {
+		if err := user.OauthIDValidator(v); err != nil {
+			return &ValidationError{Name: "oauth_id", err: fmt.Errorf(`ent: validator failed for field "User.oauth_id": %w`, err)}
+		}
+	}
+	if v, ok := uu.mutation.OauthProvider(); ok {
+		if err := user.OauthProviderValidator(v); err != nil {
+			return &ValidationError{Name: "oauth_provider", err: fmt.Errorf(`ent: validator failed for field "User.oauth_provider": %w`, err)}
+		}
+	}
 	if v, ok := uu.mutation.Email(); ok {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
+		}
+	}
+	if v, ok := uu.mutation.Name(); ok {
+		if err := user.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "User.name": %w`, err)}
 		}
 	}
 	return nil
@@ -160,14 +197,17 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := uu.mutation.OauthID(); ok {
+		_spec.SetField(user.FieldOauthID, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.OauthProvider(); ok {
+		_spec.SetField(user.FieldOauthProvider, field.TypeString, value)
+	}
 	if value, ok := uu.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.Nickname(); ok {
-		_spec.SetField(user.FieldNickname, field.TypeString, value)
-	}
-	if uu.mutation.NicknameCleared() {
-		_spec.ClearField(user.FieldNickname, field.TypeString)
+	if value, ok := uu.mutation.Name(); ok {
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.ProfileImageURL(); ok {
 		_spec.SetField(user.FieldProfileImageURL, field.TypeString, value)
@@ -201,6 +241,34 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
+// SetOauthID sets the "oauth_id" field.
+func (uuo *UserUpdateOne) SetOauthID(s string) *UserUpdateOne {
+	uuo.mutation.SetOauthID(s)
+	return uuo
+}
+
+// SetNillableOauthID sets the "oauth_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOauthID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetOauthID(*s)
+	}
+	return uuo
+}
+
+// SetOauthProvider sets the "oauth_provider" field.
+func (uuo *UserUpdateOne) SetOauthProvider(s string) *UserUpdateOne {
+	uuo.mutation.SetOauthProvider(s)
+	return uuo
+}
+
+// SetNillableOauthProvider sets the "oauth_provider" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOauthProvider(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetOauthProvider(*s)
+	}
+	return uuo
+}
+
 // SetEmail sets the "email" field.
 func (uuo *UserUpdateOne) SetEmail(s string) *UserUpdateOne {
 	uuo.mutation.SetEmail(s)
@@ -215,23 +283,17 @@ func (uuo *UserUpdateOne) SetNillableEmail(s *string) *UserUpdateOne {
 	return uuo
 }
 
-// SetNickname sets the "nickname" field.
-func (uuo *UserUpdateOne) SetNickname(s string) *UserUpdateOne {
-	uuo.mutation.SetNickname(s)
+// SetName sets the "name" field.
+func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
+	uuo.mutation.SetName(s)
 	return uuo
 }
 
-// SetNillableNickname sets the "nickname" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableNickname(s *string) *UserUpdateOne {
+// SetNillableName sets the "name" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableName(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetNickname(*s)
+		uuo.SetName(*s)
 	}
-	return uuo
-}
-
-// ClearNickname clears the value of the "nickname" field.
-func (uuo *UserUpdateOne) ClearNickname() *UserUpdateOne {
-	uuo.mutation.ClearNickname()
 	return uuo
 }
 
@@ -317,9 +379,24 @@ func (uuo *UserUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (uuo *UserUpdateOne) check() error {
+	if v, ok := uuo.mutation.OauthID(); ok {
+		if err := user.OauthIDValidator(v); err != nil {
+			return &ValidationError{Name: "oauth_id", err: fmt.Errorf(`ent: validator failed for field "User.oauth_id": %w`, err)}
+		}
+	}
+	if v, ok := uuo.mutation.OauthProvider(); ok {
+		if err := user.OauthProviderValidator(v); err != nil {
+			return &ValidationError{Name: "oauth_provider", err: fmt.Errorf(`ent: validator failed for field "User.oauth_provider": %w`, err)}
+		}
+	}
 	if v, ok := uuo.mutation.Email(); ok {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
+		}
+	}
+	if v, ok := uuo.mutation.Name(); ok {
+		if err := user.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "User.name": %w`, err)}
 		}
 	}
 	return nil
@@ -357,14 +434,17 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := uuo.mutation.OauthID(); ok {
+		_spec.SetField(user.FieldOauthID, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.OauthProvider(); ok {
+		_spec.SetField(user.FieldOauthProvider, field.TypeString, value)
+	}
 	if value, ok := uuo.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.Nickname(); ok {
-		_spec.SetField(user.FieldNickname, field.TypeString, value)
-	}
-	if uuo.mutation.NicknameCleared() {
-		_spec.ClearField(user.FieldNickname, field.TypeString)
+	if value, ok := uuo.mutation.Name(); ok {
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.ProfileImageURL(); ok {
 		_spec.SetField(user.FieldProfileImageURL, field.TypeString, value)

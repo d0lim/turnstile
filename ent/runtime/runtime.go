@@ -7,7 +7,6 @@ import (
 
 	"github.com/d0lim/turnstile/ent/schema"
 	"github.com/d0lim/turnstile/ent/user"
-	"github.com/d0lim/turnstile/ent/useroauthprovider"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -31,20 +30,22 @@ func init() {
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescOauthID is the schema descriptor for oauth_id field.
+	userDescOauthID := userFields[1].Descriptor()
+	// user.OauthIDValidator is a validator for the "oauth_id" field. It is called by the builders before save.
+	user.OauthIDValidator = userDescOauthID.Validators[0].(func(string) error)
+	// userDescOauthProvider is the schema descriptor for oauth_provider field.
+	userDescOauthProvider := userFields[2].Descriptor()
+	// user.OauthProviderValidator is a validator for the "oauth_provider" field. It is called by the builders before save.
+	user.OauthProviderValidator = userDescOauthProvider.Validators[0].(func(string) error)
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[1].Descriptor()
+	userDescEmail := userFields[3].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
-	useroauthproviderFields := schema.UserOauthProvider{}.Fields()
-	_ = useroauthproviderFields
-	// useroauthproviderDescOauthProvider is the schema descriptor for oauth_provider field.
-	useroauthproviderDescOauthProvider := useroauthproviderFields[2].Descriptor()
-	// useroauthprovider.OauthProviderValidator is a validator for the "oauth_provider" field. It is called by the builders before save.
-	useroauthprovider.OauthProviderValidator = useroauthproviderDescOauthProvider.Validators[0].(func(string) error)
-	// useroauthproviderDescOauthUserID is the schema descriptor for oauth_user_id field.
-	useroauthproviderDescOauthUserID := useroauthproviderFields[3].Descriptor()
-	// useroauthprovider.OauthUserIDValidator is a validator for the "oauth_user_id" field. It is called by the builders before save.
-	useroauthprovider.OauthUserIDValidator = useroauthproviderDescOauthUserID.Validators[0].(func(string) error)
+	// userDescName is the schema descriptor for name field.
+	userDescName := userFields[4].Descriptor()
+	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	user.NameValidator = userDescName.Validators[0].(func(string) error)
 }
 
 const (

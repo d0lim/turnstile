@@ -18,10 +18,14 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldOauthID holds the string denoting the oauth_id field in the database.
+	FieldOauthID = "oauth_id"
+	// FieldOauthProvider holds the string denoting the oauth_provider field in the database.
+	FieldOauthProvider = "oauth_provider"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldNickname holds the string denoting the nickname field in the database.
-	FieldNickname = "nickname"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldProfileImageURL holds the string denoting the profile_image_url field in the database.
 	FieldProfileImageURL = "profile_image_url"
 	// Table holds the table name of the user in the database.
@@ -33,8 +37,10 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldOauthID,
+	FieldOauthProvider,
 	FieldEmail,
-	FieldNickname,
+	FieldName,
 	FieldProfileImageURL,
 }
 
@@ -61,8 +67,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// OauthIDValidator is a validator for the "oauth_id" field. It is called by the builders before save.
+	OauthIDValidator func(string) error
+	// OauthProviderValidator is a validator for the "oauth_provider" field. It is called by the builders before save.
+	OauthProviderValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -83,14 +95,24 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByOauthID orders the results by the oauth_id field.
+func ByOauthID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOauthID, opts...).ToFunc()
+}
+
+// ByOauthProvider orders the results by the oauth_provider field.
+func ByOauthProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOauthProvider, opts...).ToFunc()
+}
+
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
-// ByNickname orders the results by the nickname field.
-func ByNickname(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNickname, opts...).ToFunc()
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByProfileImageURL orders the results by the profile_image_url field.

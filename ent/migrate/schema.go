@@ -14,8 +14,10 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "oauth_id", Type: field.TypeString},
+		{Name: "oauth_provider", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
-		{Name: "nickname", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
 		{Name: "profile_image_url", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -24,23 +26,9 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
-	// UserOauthProvidersColumns holds the columns for the "user_oauth_providers" table.
-	UserOauthProvidersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "oauth_provider", Type: field.TypeString},
-		{Name: "oauth_user_id", Type: field.TypeString},
-	}
-	// UserOauthProvidersTable holds the schema information for the "user_oauth_providers" table.
-	UserOauthProvidersTable = &schema.Table{
-		Name:       "user_oauth_providers",
-		Columns:    UserOauthProvidersColumns,
-		PrimaryKey: []*schema.Column{UserOauthProvidersColumns[0]},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		UsersTable,
-		UserOauthProvidersTable,
 	}
 )
 

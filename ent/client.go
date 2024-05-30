@@ -15,7 +15,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/d0lim/turnstile/ent/user"
-	"github.com/d0lim/turnstile/ent/useroauthprovider"
 
 	stdsql "database/sql"
 )
@@ -27,8 +26,6 @@ type Client struct {
 	Schema *migrate.Schema
 	// User is the client for interacting with the User builders.
 	User *UserClient
-	// UserOauthProvider is the client for interacting with the UserOauthProvider builders.
-	UserOauthProvider *UserOauthProviderClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -41,7 +38,6 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.User = NewUserClient(c.config)
-	c.UserOauthProvider = NewUserOauthProviderClient(c.config)
 }
 
 type (
@@ -132,10 +128,9 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:               ctx,
-		config:            cfg,
-		User:              NewUserClient(cfg),
-		UserOauthProvider: NewUserOauthProviderClient(cfg),
+		ctx:    ctx,
+		config: cfg,
+		User:   NewUserClient(cfg),
 	}, nil
 }
 
@@ -153,10 +148,9 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:               ctx,
-		config:            cfg,
-		User:              NewUserClient(cfg),
-		UserOauthProvider: NewUserOauthProviderClient(cfg),
+		ctx:    ctx,
+		config: cfg,
+		User:   NewUserClient(cfg),
 	}, nil
 }
 
@@ -186,14 +180,12 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.User.Use(hooks...)
-	c.UserOauthProvider.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.User.Intercept(interceptors...)
-	c.UserOauthProvider.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -201,8 +193,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
-	case *UserOauthProviderMutation:
-		return c.UserOauthProvider.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -342,146 +332,13 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
-// UserOauthProviderClient is a client for the UserOauthProvider schema.
-type UserOauthProviderClient struct {
-	config
-}
-
-// NewUserOauthProviderClient returns a client for the UserOauthProvider from the given config.
-func NewUserOauthProviderClient(c config) *UserOauthProviderClient {
-	return &UserOauthProviderClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `useroauthprovider.Hooks(f(g(h())))`.
-func (c *UserOauthProviderClient) Use(hooks ...Hook) {
-	c.hooks.UserOauthProvider = append(c.hooks.UserOauthProvider, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `useroauthprovider.Intercept(f(g(h())))`.
-func (c *UserOauthProviderClient) Intercept(interceptors ...Interceptor) {
-	c.inters.UserOauthProvider = append(c.inters.UserOauthProvider, interceptors...)
-}
-
-// Create returns a builder for creating a UserOauthProvider entity.
-func (c *UserOauthProviderClient) Create() *UserOauthProviderCreate {
-	mutation := newUserOauthProviderMutation(c.config, OpCreate)
-	return &UserOauthProviderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of UserOauthProvider entities.
-func (c *UserOauthProviderClient) CreateBulk(builders ...*UserOauthProviderCreate) *UserOauthProviderCreateBulk {
-	return &UserOauthProviderCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *UserOauthProviderClient) MapCreateBulk(slice any, setFunc func(*UserOauthProviderCreate, int)) *UserOauthProviderCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &UserOauthProviderCreateBulk{err: fmt.Errorf("calling to UserOauthProviderClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*UserOauthProviderCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &UserOauthProviderCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for UserOauthProvider.
-func (c *UserOauthProviderClient) Update() *UserOauthProviderUpdate {
-	mutation := newUserOauthProviderMutation(c.config, OpUpdate)
-	return &UserOauthProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *UserOauthProviderClient) UpdateOne(uop *UserOauthProvider) *UserOauthProviderUpdateOne {
-	mutation := newUserOauthProviderMutation(c.config, OpUpdateOne, withUserOauthProvider(uop))
-	return &UserOauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *UserOauthProviderClient) UpdateOneID(id int64) *UserOauthProviderUpdateOne {
-	mutation := newUserOauthProviderMutation(c.config, OpUpdateOne, withUserOauthProviderID(id))
-	return &UserOauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for UserOauthProvider.
-func (c *UserOauthProviderClient) Delete() *UserOauthProviderDelete {
-	mutation := newUserOauthProviderMutation(c.config, OpDelete)
-	return &UserOauthProviderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *UserOauthProviderClient) DeleteOne(uop *UserOauthProvider) *UserOauthProviderDeleteOne {
-	return c.DeleteOneID(uop.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *UserOauthProviderClient) DeleteOneID(id int64) *UserOauthProviderDeleteOne {
-	builder := c.Delete().Where(useroauthprovider.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &UserOauthProviderDeleteOne{builder}
-}
-
-// Query returns a query builder for UserOauthProvider.
-func (c *UserOauthProviderClient) Query() *UserOauthProviderQuery {
-	return &UserOauthProviderQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeUserOauthProvider},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a UserOauthProvider entity by its id.
-func (c *UserOauthProviderClient) Get(ctx context.Context, id int64) (*UserOauthProvider, error) {
-	return c.Query().Where(useroauthprovider.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *UserOauthProviderClient) GetX(ctx context.Context, id int64) *UserOauthProvider {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *UserOauthProviderClient) Hooks() []Hook {
-	return c.hooks.UserOauthProvider
-}
-
-// Interceptors returns the client interceptors.
-func (c *UserOauthProviderClient) Interceptors() []Interceptor {
-	return c.inters.UserOauthProvider
-}
-
-func (c *UserOauthProviderClient) mutate(ctx context.Context, m *UserOauthProviderMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&UserOauthProviderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&UserOauthProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&UserOauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&UserOauthProviderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown UserOauthProvider mutation op: %q", m.Op())
-	}
-}
-
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		User, UserOauthProvider []ent.Hook
+		User []ent.Hook
 	}
 	inters struct {
-		User, UserOauthProvider []ent.Interceptor
+		User []ent.Interceptor
 	}
 )
 
