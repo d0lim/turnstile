@@ -17,15 +17,26 @@ func NewUserRepository(client *ent.Client) repository.UserRepository {
 	return &userRepository{client: client}
 }
 
-func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) error {
-	_, err := r.client.User.Create().
+func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*domain.User, error) {
+	u, err := r.client.User.Create().
 		SetOAuthID(user.OAuthId).
 		SetOAuthProvider(user.OAuthProvider).
 		SetEmail(user.Email).
 		SetName(user.Name).
 		SetNillableProfileImageURL(user.ProfileImageUrl).
 		Save(ctx)
-	return err
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.User{
+		ID:              u.ID,
+		OAuthId:         u.OAuthID,
+		OAuthProvider:   u.OAuthProvider,
+		Email:           u.Email,
+		Name:            u.Name,
+		ProfileImageUrl: u.ProfileImageURL,
+	}, nil
 }
 
 func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
