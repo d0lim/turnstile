@@ -25,8 +25,3 @@ func (h *UserHandler) RedirectLoginGoogle(c *fiber.Ctx) error {
 func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 	return nil
 }
-
-func SetupRoutes(app *fiber.App, handler *UserHandler) {
-	app.Post("/api/v1/auth/login/google", handler.RedirectLoginGoogle)
-	app.Get("/api/v1/auth/callback/google", handler.CallbackGoogle)
-}
