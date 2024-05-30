@@ -4,13 +4,14 @@
 //go:build !wireinject
 // +build !wireinject
 
-package framework
+package di
 
 import (
 	"github.com/d0lim/turnstile/internal/adapters/in/api"
 	"github.com/d0lim/turnstile/internal/adapters/out/db"
 	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
+	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,15 +19,16 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() (*fiber.App, error) {
-	sessionConfig := config.NewSessionStore()
+	oAuthConfig := config.NewOAuthConfig()
+	sessionConfig := config.NewSessionConfig()
 	client, err := ent.NewClient()
 	if err != nil {
 		return nil, err
 	}
 	userRepository := db.NewUserRepository(client)
 	userUsecase := usecase.NewUserUsecase(userRepository)
-	userHandler := api.NewUserHandler(sessionConfig, userUsecase)
-	app, err := NewApp(userHandler)
+	userHandler := api.NewUserHandler(oAuthConfig, sessionConfig, userUsecase)
+	app, err := framework.NewApp(userHandler)
 	if err != nil {
 		return nil, err
 	}
