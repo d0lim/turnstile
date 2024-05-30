@@ -9,7 +9,12 @@ func NewApp(
 	userHandler *api.UserHandler,
 ) (*fiber.App, error) {
 	app := fiber.New()
-	api.SetupRoutes(app, userHandler)
+	SetupRoutes(app, userHandler)
 
 	return app, nil
+}
+
+func SetupRoutes(app *fiber.App, handler *api.UserHandler) {
+	app.Post("/api/v1/auth/login/google", handler.RedirectLoginGoogle)
+	app.Get("/api/v1/auth/callback/google", handler.CallbackGoogle)
 }
