@@ -21,10 +21,14 @@ type User struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// OauthID holds the value of the "oauth_id" field.
+	OauthID string `json:"oauth_id,omitempty"`
+	// OauthProvider holds the value of the "oauth_provider" field.
+	OauthProvider string `json:"oauth_provider,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
-	// Nickname holds the value of the "nickname" field.
-	Nickname string `json:"nickname,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// ProfileImageURL holds the value of the "profile_image_url" field.
 	ProfileImageURL string `json:"profile_image_url,omitempty"`
 	selectValues    sql.SelectValues
@@ -37,7 +41,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldEmail, user.FieldNickname, user.FieldProfileImageURL:
+		case user.FieldOauthID, user.FieldOauthProvider, user.FieldEmail, user.FieldName, user.FieldProfileImageURL:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -74,17 +78,29 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.UpdatedAt = value.Time
 			}
+		case user.FieldOauthID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field oauth_id", values[i])
+			} else if value.Valid {
+				u.OauthID = value.String
+			}
+		case user.FieldOauthProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field oauth_provider", values[i])
+			} else if value.Valid {
+				u.OauthProvider = value.String
+			}
 		case user.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				u.Email = value.String
 			}
-		case user.FieldNickname:
+		case user.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field nickname", values[i])
+				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				u.Nickname = value.String
+				u.Name = value.String
 			}
 		case user.FieldProfileImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -134,11 +150,17 @@ func (u *User) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("oauth_id=")
+	builder.WriteString(u.OauthID)
+	builder.WriteString(", ")
+	builder.WriteString("oauth_provider=")
+	builder.WriteString(u.OauthProvider)
+	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(u.Email)
 	builder.WriteString(", ")
-	builder.WriteString("nickname=")
-	builder.WriteString(u.Nickname)
+	builder.WriteString("name=")
+	builder.WriteString(u.Name)
 	builder.WriteString(", ")
 	builder.WriteString("profile_image_url=")
 	builder.WriteString(u.ProfileImageURL)

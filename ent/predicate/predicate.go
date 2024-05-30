@@ -8,6 +8,3 @@ import (
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
-
-// UserOauthProvider is the predicate function for useroauthprovider builders.
-type UserOauthProvider func(*sql.Selector)
