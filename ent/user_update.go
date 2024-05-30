@@ -34,30 +34,30 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
-// SetOauthID sets the "oauth_id" field.
-func (uu *UserUpdate) SetOauthID(s string) *UserUpdate {
-	uu.mutation.SetOauthID(s)
+// SetOAuthID sets the "o_auth_id" field.
+func (uu *UserUpdate) SetOAuthID(s string) *UserUpdate {
+	uu.mutation.SetOAuthID(s)
 	return uu
 }
 
-// SetNillableOauthID sets the "oauth_id" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableOauthID(s *string) *UserUpdate {
+// SetNillableOAuthID sets the "o_auth_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOAuthID(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetOauthID(*s)
+		uu.SetOAuthID(*s)
 	}
 	return uu
 }
 
-// SetOauthProvider sets the "oauth_provider" field.
-func (uu *UserUpdate) SetOauthProvider(s string) *UserUpdate {
-	uu.mutation.SetOauthProvider(s)
+// SetOAuthProvider sets the "o_auth_provider" field.
+func (uu *UserUpdate) SetOAuthProvider(s string) *UserUpdate {
+	uu.mutation.SetOAuthProvider(s)
 	return uu
 }
 
-// SetNillableOauthProvider sets the "oauth_provider" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableOauthProvider(s *string) *UserUpdate {
+// SetNillableOAuthProvider sets the "o_auth_provider" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableOAuthProvider(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetOauthProvider(*s)
+		uu.SetOAuthProvider(*s)
 	}
 	return uu
 }
@@ -159,14 +159,14 @@ func (uu *UserUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (uu *UserUpdate) check() error {
-	if v, ok := uu.mutation.OauthID(); ok {
-		if err := user.OauthIDValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_id", err: fmt.Errorf(`ent: validator failed for field "User.oauth_id": %w`, err)}
+	if v, ok := uu.mutation.OAuthID(); ok {
+		if err := user.OAuthIDValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_id", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_id": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.OauthProvider(); ok {
-		if err := user.OauthProviderValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_provider", err: fmt.Errorf(`ent: validator failed for field "User.oauth_provider": %w`, err)}
+	if v, ok := uu.mutation.OAuthProvider(); ok {
+		if err := user.OAuthProviderValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_provider", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_provider": %w`, err)}
 		}
 	}
 	if v, ok := uu.mutation.Email(); ok {
@@ -197,11 +197,11 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := uu.mutation.OauthID(); ok {
-		_spec.SetField(user.FieldOauthID, field.TypeString, value)
+	if value, ok := uu.mutation.OAuthID(); ok {
+		_spec.SetField(user.FieldOAuthID, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.OauthProvider(); ok {
-		_spec.SetField(user.FieldOauthProvider, field.TypeString, value)
+	if value, ok := uu.mutation.OAuthProvider(); ok {
+		_spec.SetField(user.FieldOAuthProvider, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
@@ -241,30 +241,30 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
-// SetOauthID sets the "oauth_id" field.
-func (uuo *UserUpdateOne) SetOauthID(s string) *UserUpdateOne {
-	uuo.mutation.SetOauthID(s)
+// SetOAuthID sets the "o_auth_id" field.
+func (uuo *UserUpdateOne) SetOAuthID(s string) *UserUpdateOne {
+	uuo.mutation.SetOAuthID(s)
 	return uuo
 }
 
-// SetNillableOauthID sets the "oauth_id" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableOauthID(s *string) *UserUpdateOne {
+// SetNillableOAuthID sets the "o_auth_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOAuthID(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetOauthID(*s)
+		uuo.SetOAuthID(*s)
 	}
 	return uuo
 }
 
-// SetOauthProvider sets the "oauth_provider" field.
-func (uuo *UserUpdateOne) SetOauthProvider(s string) *UserUpdateOne {
-	uuo.mutation.SetOauthProvider(s)
+// SetOAuthProvider sets the "o_auth_provider" field.
+func (uuo *UserUpdateOne) SetOAuthProvider(s string) *UserUpdateOne {
+	uuo.mutation.SetOAuthProvider(s)
 	return uuo
 }
 
-// SetNillableOauthProvider sets the "oauth_provider" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableOauthProvider(s *string) *UserUpdateOne {
+// SetNillableOAuthProvider sets the "o_auth_provider" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOAuthProvider(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetOauthProvider(*s)
+		uuo.SetOAuthProvider(*s)
 	}
 	return uuo
 }
@@ -379,14 +379,14 @@ func (uuo *UserUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (uuo *UserUpdateOne) check() error {
-	if v, ok := uuo.mutation.OauthID(); ok {
-		if err := user.OauthIDValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_id", err: fmt.Errorf(`ent: validator failed for field "User.oauth_id": %w`, err)}
+	if v, ok := uuo.mutation.OAuthID(); ok {
+		if err := user.OAuthIDValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_id", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_id": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.OauthProvider(); ok {
-		if err := user.OauthProviderValidator(v); err != nil {
-			return &ValidationError{Name: "oauth_provider", err: fmt.Errorf(`ent: validator failed for field "User.oauth_provider": %w`, err)}
+	if v, ok := uuo.mutation.OAuthProvider(); ok {
+		if err := user.OAuthProviderValidator(v); err != nil {
+			return &ValidationError{Name: "o_auth_provider", err: fmt.Errorf(`ent: validator failed for field "User.o_auth_provider": %w`, err)}
 		}
 	}
 	if v, ok := uuo.mutation.Email(); ok {
@@ -434,11 +434,11 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := uuo.mutation.OauthID(); ok {
-		_spec.SetField(user.FieldOauthID, field.TypeString, value)
+	if value, ok := uuo.mutation.OAuthID(); ok {
+		_spec.SetField(user.FieldOAuthID, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.OauthProvider(); ok {
-		_spec.SetField(user.FieldOauthProvider, field.TypeString, value)
+	if value, ok := uuo.mutation.OAuthProvider(); ok {
+		_spec.SetField(user.FieldOAuthProvider, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)

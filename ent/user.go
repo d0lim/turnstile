@@ -21,10 +21,10 @@ type User struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// OauthID holds the value of the "oauth_id" field.
-	OauthID string `json:"oauth_id,omitempty"`
-	// OauthProvider holds the value of the "oauth_provider" field.
-	OauthProvider string `json:"oauth_provider,omitempty"`
+	// OAuthID holds the value of the "o_auth_id" field.
+	OAuthID string `json:"o_auth_id,omitempty"`
+	// OAuthProvider holds the value of the "o_auth_provider" field.
+	OAuthProvider string `json:"o_auth_provider,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
 	// Name holds the value of the "name" field.
@@ -41,7 +41,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldOauthID, user.FieldOauthProvider, user.FieldEmail, user.FieldName, user.FieldProfileImageURL:
+		case user.FieldOAuthID, user.FieldOAuthProvider, user.FieldEmail, user.FieldName, user.FieldProfileImageURL:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -78,17 +78,17 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.UpdatedAt = value.Time
 			}
-		case user.FieldOauthID:
+		case user.FieldOAuthID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field oauth_id", values[i])
+				return fmt.Errorf("unexpected type %T for field o_auth_id", values[i])
 			} else if value.Valid {
-				u.OauthID = value.String
+				u.OAuthID = value.String
 			}
-		case user.FieldOauthProvider:
+		case user.FieldOAuthProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field oauth_provider", values[i])
+				return fmt.Errorf("unexpected type %T for field o_auth_provider", values[i])
 			} else if value.Valid {
-				u.OauthProvider = value.String
+				u.OAuthProvider = value.String
 			}
 		case user.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -150,11 +150,11 @@ func (u *User) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("oauth_id=")
-	builder.WriteString(u.OauthID)
+	builder.WriteString("o_auth_id=")
+	builder.WriteString(u.OAuthID)
 	builder.WriteString(", ")
-	builder.WriteString("oauth_provider=")
-	builder.WriteString(u.OauthProvider)
+	builder.WriteString("o_auth_provider=")
+	builder.WriteString(u.OAuthProvider)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(u.Email)

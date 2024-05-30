@@ -18,10 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldOauthID holds the string denoting the oauth_id field in the database.
-	FieldOauthID = "oauth_id"
-	// FieldOauthProvider holds the string denoting the oauth_provider field in the database.
-	FieldOauthProvider = "oauth_provider"
+	// FieldOAuthID holds the string denoting the o_auth_id field in the database.
+	FieldOAuthID = "o_auth_id"
+	// FieldOAuthProvider holds the string denoting the o_auth_provider field in the database.
+	FieldOAuthProvider = "o_auth_provider"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldName holds the string denoting the name field in the database.
@@ -37,8 +37,8 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldOauthID,
-	FieldOauthProvider,
+	FieldOAuthID,
+	FieldOAuthProvider,
 	FieldEmail,
 	FieldName,
 	FieldProfileImageURL,
@@ -67,10 +67,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// OauthIDValidator is a validator for the "oauth_id" field. It is called by the builders before save.
-	OauthIDValidator func(string) error
-	// OauthProviderValidator is a validator for the "oauth_provider" field. It is called by the builders before save.
-	OauthProviderValidator func(string) error
+	// OAuthIDValidator is a validator for the "o_auth_id" field. It is called by the builders before save.
+	OAuthIDValidator func(string) error
+	// OAuthProviderValidator is a validator for the "o_auth_provider" field. It is called by the builders before save.
+	OAuthProviderValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -95,14 +95,14 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByOauthID orders the results by the oauth_id field.
-func ByOauthID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOauthID, opts...).ToFunc()
+// ByOAuthID orders the results by the o_auth_id field.
+func ByOAuthID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOAuthID, opts...).ToFunc()
 }
 
-// ByOauthProvider orders the results by the oauth_provider field.
-func ByOauthProvider(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOauthProvider, opts...).ToFunc()
+// ByOAuthProvider orders the results by the o_auth_provider field.
+func ByOAuthProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOAuthProvider, opts...).ToFunc()
 }
 
 // ByEmail orders the results by the email field.
