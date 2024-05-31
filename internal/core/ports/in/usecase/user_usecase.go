@@ -19,7 +19,7 @@ func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
 	email string,
 	user *domain.User,
 	ctx context.Context,
-) (*domain.User, error) {
+) (*domain.User, *domain.DomainError) {
 	userFromDb, err := u.GetUserByOAuthProviderAndEmail(oAuthProvider, email, ctx)
 	if err != nil {
 		if domainErr, ok := domain.IsDomainError(err); ok {
@@ -36,18 +36,18 @@ func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
 	return userFromDb, nil
 }
 
-func (u *UserUsecase) CreateUser(user *domain.User, ctx context.Context) (*domain.User, error) {
+func (u *UserUsecase) CreateUser(user *domain.User, ctx context.Context) (*domain.User, *domain.DomainError) {
 	return u.repo.CreateUser(user, ctx)
 }
 
-func (u *UserUsecase) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
+func (u *UserUsecase) GetUserByID(id int64, ctx context.Context) (*domain.User, *domain.DomainError) {
 	return u.repo.GetUserByID(id, ctx)
 }
 
-func (u *UserUsecase) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error) {
+func (u *UserUsecase) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, *domain.DomainError) {
 	return u.repo.GetUserByOAuthProviderAndEmail(oAuthProvider, email, ctx)
 }
 
-func (u *UserUsecase) DeleteUser(id int64, ctx context.Context) error {
+func (u *UserUsecase) DeleteUser(id int64, ctx context.Context) *domain.DomainError {
 	return u.repo.DeleteUser(id, ctx)
 }
