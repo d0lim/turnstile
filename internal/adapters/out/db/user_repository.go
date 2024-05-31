@@ -2,11 +2,11 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"github.com/d0lim/turnstile/ent"
 	"github.com/d0lim/turnstile/ent/user"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
-	"github.com/pkg/errors"
 )
 
 type userRepository struct {
@@ -42,7 +42,10 @@ func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*do
 func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
 	a, err := r.client.User.Get(ctx, id)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting core by ID")
+		if ent.IsNotFound(err) {
+			return nil, domain.NewDomainError(fmt.Sprintf("user by id: %d not found", id), domain.NotFound, err)
+		}
+		return nil, domain.NewDomainError(fmt.Sprintf("failed to find user by id: %d", id), domain.Internal, err)
 	}
 
 	return &domain.User{
@@ -58,7 +61,10 @@ func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.Use
 func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error) {
 	u, err := r.client.User.Query().Where(user.OAuthProvider(oAuthProvider), user.Email(email)).Only(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting core by Email")
+		if ent.IsNotFound(err) {
+			return nil, domain.NewDomainError(fmt.Sprintf("user by oAuthProvider: %s, email: %s", oAuthProvider, email), domain.NotFound, err)
+		}
+		return nil, domain.NewDomainError(fmt.Sprintf("failed to find user by oAuthProvider: %s, email: %s", oAuthProvider, email), domain.Internal, err)
 	}
 
 	return &domain.User{
