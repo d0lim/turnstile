@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/d0lim/turnstile/ent"
 	"github.com/d0lim/turnstile/internal/adapters/in/api/dto"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
@@ -77,24 +76,18 @@ func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	foundUser, err := h.usecase.GetUserByOAuthProviderAndEmail("GOOGLE", user.Email, c.Context())
+	userFromDb, err := h.usecase.GetUserByOAuthProviderAndEmailOrCreateIfAbsent("GOOGLE", user.Email, &domain.User{
+		ID:              0,
+		OAuthId:         user.ID,
+		OAuthProvider:   "GOOGLE",
+		Name:            user.Name,
+		Email:           user.Email,
+		ProfileImageUrl: &user.Picture,
+	}, c.Context())
+
 	if err != nil {
-		if ent.IsNotFound(err) {
-			createdUser, err := h.usecase.CreateUser(&domain.User{
-				ID:              0,
-				OAuthId:         user.ID,
-				OAuthProvider:   "GOOGLE",
-				Name:            user.Name,
-				Email:           user.Email,
-				ProfileImageUrl: &user.Picture,
-			}, c.Context())
-			if err != nil {
-				return fiber.NewError(fiber.StatusInternalServerError, err.Error())
-			}
-			return c.JSON(createdUser)
-		}
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(foundUser)
+	return c.JSON(userFromDb)
 }
