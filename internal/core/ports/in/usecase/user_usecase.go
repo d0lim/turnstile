@@ -14,6 +14,28 @@ func NewUserUsecase(repo repository.UserRepository) *UserUsecase {
 	return &UserUsecase{repo: repo}
 }
 
+func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
+	oAuthProvider string,
+	email string,
+	user *domain.User,
+	ctx context.Context,
+) (*domain.User, error) {
+	userFromDb, err := u.GetUserByOAuthProviderAndEmail(oAuthProvider, email, ctx)
+	if err != nil {
+		if domainErr, ok := domain.IsDomainError(err); ok {
+			if domainErr.Code == domain.NotFound {
+				createdUser, err := u.CreateUser(user, ctx)
+				if err != nil {
+					return nil, err
+				}
+				return createdUser, nil
+			}
+		}
+		return nil, err
+	}
+	return userFromDb, nil
+}
+
 func (u *UserUsecase) CreateUser(user *domain.User, ctx context.Context) (*domain.User, error) {
 	return u.repo.CreateUser(user, ctx)
 }
