@@ -17,7 +17,7 @@ func NewUserRepository(client *ent.Client) repository.UserRepository {
 	return &userRepository{client: client}
 }
 
-func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*domain.User, error) {
+func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*domain.User, *domain.DomainError) {
 	u, err := r.client.User.Create().
 		SetOAuthID(user.OAuthId).
 		SetOAuthProvider(user.OAuthProvider).
@@ -26,7 +26,7 @@ func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*do
 		SetNillableProfileImageURL(user.ProfileImageUrl).
 		Save(ctx)
 	if err != nil {
-		return nil, err
+		return nil, domain.NewDomainError("failed to create user", domain.Internal, err)
 	}
 
 	return &domain.User{
@@ -39,7 +39,7 @@ func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*do
 	}, nil
 }
 
-func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
+func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, *domain.DomainError) {
 	a, err := r.client.User.Get(ctx, id)
 	if err != nil {
 		if ent.IsNotFound(err) {
@@ -58,7 +58,7 @@ func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.Use
 	}, nil
 }
 
-func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error) {
+func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, *domain.DomainError) {
 	u, err := r.client.User.Query().Where(user.OAuthProvider(oAuthProvider), user.Email(email)).Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
@@ -77,6 +77,7 @@ func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, em
 	}, nil
 }
 
-func (r *userRepository) DeleteUser(id int64, ctx context.Context) error {
-	return r.client.User.DeleteOneID(id).Exec(ctx)
+func (r *userRepository) DeleteUser(id int64, ctx context.Context) *domain.DomainError {
+	err := r.client.User.DeleteOneID(id).Exec(ctx)
+	return domain.NewDomainError("failed to delete user", domain.Internal, err)
 }
