@@ -16,6 +16,6 @@ func NewApp(
 }
 
 func SetupRoutes(app *fiber.App, handler *api.UserHandler) {
-	app.Get("/api/v1/auth/login", handler.RedirectLoginGoogle)
+	app.Get("/api/v1/auth/login", handler.GetRedirectLoginGoogle)
 	app.Get("/api/v1/auth/callback", handler.CallbackGoogle)
 }

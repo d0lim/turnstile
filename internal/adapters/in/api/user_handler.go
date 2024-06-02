@@ -9,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
-	"net/http"
 )
 
 type UserHandler struct {
@@ -30,7 +29,7 @@ func NewUserHandler(
 	}
 }
 
-func (h *UserHandler) RedirectLoginGoogle(c *fiber.Ctx) error {
+func (h *UserHandler) GetRedirectLoginGoogle(c *fiber.Ctx) error {
 	session, err := h.session.Store.Get(c)
 	if err != nil {
 		return err
@@ -44,7 +43,7 @@ func (h *UserHandler) RedirectLoginGoogle(c *fiber.Ctx) error {
 
 	authCodeURL := h.oAuthConfig.Google.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
-	return c.Redirect(authCodeURL, http.StatusTemporaryRedirect)
+	return c.JSON(&dto.RedirectUriResponse{RedirectUri: authCodeURL})
 }
 
 func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
