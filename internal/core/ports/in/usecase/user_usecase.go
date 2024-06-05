@@ -4,27 +4,73 @@ import (
 	"context"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
+	"github.com/d0lim/turnstile/internal/core/ports/out/token"
 )
 
 type UserUsecase struct {
-	repo repository.UserRepository
+	repo    repository.UserRepository
+	manager token.TokenManager
 }
 
-func NewUserUsecase(repo repository.UserRepository) *UserUsecase {
-	return &UserUsecase{repo: repo}
+func NewUserUsecase(repo repository.UserRepository, manager token.TokenManager) *UserUsecase {
+	return &UserUsecase{repo: repo, manager: manager}
+}
+
+func (u *UserUsecase) Login(
+	oAuthId string,
+	oAuthProvider string,
+	name string,
+	email string,
+	profileImageUrl *string,
+	ctx context.Context,
+) (*domain.TokenPair, *domain.DomainError) {
+	user, err := u.GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
+		oAuthId,
+		oAuthProvider,
+		name,
+		email,
+		profileImageUrl,
+		ctx,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	accessToken, err := u.manager.IssueAccessToken(user.Email)
+	if err != nil {
+		return nil, err
+	}
+	refreshToken, err := u.manager.IssueRefreshToken(user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.TokenPair{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}, nil
 }
 
 func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
+	oAuthId string,
 	oAuthProvider string,
+	name string,
 	email string,
-	user *domain.User,
+	profileImageUrl *string,
 	ctx context.Context,
 ) (*domain.User, *domain.DomainError) {
 	userFromDb, err := u.GetUserByOAuthProviderAndEmail(oAuthProvider, email, ctx)
 	if err != nil {
 		if domainErr, ok := domain.IsDomainError(err); ok {
 			if domainErr.Code == domain.NotFound {
-				createdUser, err := u.CreateUser(user, ctx)
+				createdUser, err := u.CreateUser(&domain.User{
+					ID:              0,
+					OAuthId:         oAuthId,
+					OAuthProvider:   oAuthProvider,
+					Name:            name,
+					Email:           email,
+					ProfileImageUrl: profileImageUrl,
+				}, ctx)
 				if err != nil {
 					return nil, err
 				}
