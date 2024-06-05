@@ -10,3 +10,7 @@ type GoogleUserResponse struct {
 	Name    string `json:"name"`
 	Picture string `json:"picture"`
 }
+
+type LoginResponse struct {
+	AccessToken string `json:"access_token"`
+}
