@@ -25,7 +25,7 @@ func (m *jwtTokenManager) IssueAccessToken(sub string) (string, *domain.DomainEr
 	})
 	tokenString, err := t.SignedString(m.config.AccessSecret)
 	if err != nil {
-		return "", domain.NewDomainError("Error while signing token", domain.Internal, err)
+		return "", domain.NewDomainError("Error while signing access token", domain.Internal, err)
 	}
 	return tokenString, nil
 }
@@ -38,7 +38,7 @@ func (m *jwtTokenManager) IssueRefreshToken(sub string) (string, *domain.DomainE
 	})
 	tokenString, err := t.SignedString(m.config.RefreshSecret)
 	if err != nil {
-		return "", domain.NewDomainError("Error while signing token", domain.Internal, err)
+		return "", domain.NewDomainError("Error while signing refresh token", domain.Internal, err)
 	}
 	return tokenString, nil
 }
