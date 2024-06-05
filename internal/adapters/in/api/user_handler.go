@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/d0lim/turnstile/internal/adapters/in/api/dto"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
 	"github.com/d0lim/turnstile/internal/framework/config"
@@ -85,7 +86,8 @@ func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 	)
 
 	if derr != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, derr.Cause.Error())
+		fmt.Println(derr.Cause.Error())
+		return fiber.NewError(fiber.StatusInternalServerError, derr.Error())
 	}
 
 	cookie := &fiber.Cookie{
