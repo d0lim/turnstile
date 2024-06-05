@@ -3,13 +3,13 @@ package config
 import "os"
 
 type JwtConfig struct {
-	AccessSecret  string
-	RefreshSecret string
+	AccessSecret  []byte
+	RefreshSecret []byte
 }
 
 func NewJwtConfig() *JwtConfig {
 	return &JwtConfig{
-		AccessSecret:  os.Getenv("ACCESS_SECRET"),
-		RefreshSecret: os.Getenv("REFRESH_SECRET"),
+		AccessSecret:  []byte(os.Getenv("ACCESS_SECRET")),
+		RefreshSecret: []byte(os.Getenv("REFRESH_SECRET")),
 	}
 }
