@@ -3,12 +3,12 @@ package api
 import (
 	"encoding/json"
 	"github.com/d0lim/turnstile/internal/adapters/in/api/dto"
-	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
 	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"time"
 )
 
 type UserHandler struct {
@@ -75,18 +75,30 @@ func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	userFromDb, err := h.usecase.GetUserByOAuthProviderAndEmailOrCreateIfAbsent("GOOGLE", user.Email, &domain.User{
-		ID:              0,
-		OAuthId:         user.ID,
-		OAuthProvider:   "GOOGLE",
-		Name:            user.Name,
-		Email:           user.Email,
-		ProfileImageUrl: &user.Picture,
-	}, c.Context())
+	tokenPair, derr := h.usecase.Login(
+		user.ID,
+		"GOOGLE",
+		user.Name,
+		user.Email,
+		&user.Picture,
+		c.Context(),
+	)
 
-	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	if derr != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, derr.Cause.Error())
 	}
 
-	return c.JSON(userFromDb)
+	cookie := &fiber.Cookie{
+		Name:     "refresh_token",
+		Value:    tokenPair.RefreshToken,
+		Expires:  time.Now().Add(168 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: "None",
+		Path:     "/",
+	}
+
+	c.Cookie(cookie)
+
+	return c.JSON(&dto.LoginResponse{AccessToken: tokenPair.AccessToken})
 }
