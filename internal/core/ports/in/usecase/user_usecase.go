@@ -36,11 +36,11 @@ func (u *UserUsecase) Login(
 		return nil, err
 	}
 
-	accessToken, err := u.manager.IssueAccessToken(user.Email)
+	accessToken, err := u.manager.IssueAccessToken(user.ID)
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := u.manager.IssueRefreshToken(user.Email)
+	refreshToken, err := u.manager.IssueRefreshToken(user.ID)
 	if err != nil {
 		return nil, err
 	}
