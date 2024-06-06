@@ -51,6 +51,18 @@ func (u *UserUsecase) Login(
 	}, nil
 }
 
+func (u *UserUsecase) Authenticate(tokenString string, ctx context.Context) (*domain.User, *domain.DomainError) {
+	verifiedToken, err := u.manager.VerifyAccessToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
+	user, err := u.GetUserByID(verifiedToken.Sub, ctx)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
 	oAuthId string,
 	oAuthProvider string,
