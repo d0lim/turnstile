@@ -5,6 +5,7 @@ import (
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 	"github.com/d0lim/turnstile/internal/core/ports/out/token"
+	"strconv"
 )
 
 type UserUsecase struct {
@@ -36,11 +37,11 @@ func (u *UserUsecase) Login(
 		return nil, err
 	}
 
-	accessToken, err := u.manager.IssueAccessToken(user.ID)
+	accessToken, err := u.manager.IssueAccessToken(strconv.FormatInt(user.ID, 10))
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := u.manager.IssueRefreshToken(user.ID)
+	refreshToken, err := u.manager.IssueRefreshToken(strconv.FormatInt(user.ID, 10))
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,11 @@ func (u *UserUsecase) Authenticate(tokenString string, ctx context.Context) (*do
 	if err != nil {
 		return nil, err
 	}
-	user, err := u.GetUserByID(verifiedToken.Sub, ctx)
+	userId, pErr := strconv.ParseInt(verifiedToken.Sub, 10, 64)
+	if pErr != nil {
+		return nil, domain.NewDomainError("ParseInt failed", domain.Internal, pErr)
+	}
+	user, err := u.GetUserByID(userId, ctx)
 	if err != nil {
 		return nil, err
 	}
