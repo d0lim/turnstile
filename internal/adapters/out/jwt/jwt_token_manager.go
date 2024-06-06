@@ -56,23 +56,7 @@ func (m *jwtTokenManager) VerifyAccessToken(tokenString string) (*domain.Token, 
 	}
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
-		sub, err := claims.GetSubject()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token subject", domain.Internal, err)
-		}
-		iat, err := claims.GetIssuedAt()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token iat", domain.Internal, err)
-		}
-		exp, err := claims.GetExpirationTime()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token exp", domain.Internal, err)
-		}
-		return &domain.Token{
-			Sub: sub,
-			Iat: iat.Unix(),
-			Exp: exp.Unix(),
-		}, nil
+		return m.convertClaims(claims)
 	} else {
 		return nil, domain.NewDomainError("Token is not valid", domain.Internal, err)
 	}
@@ -91,24 +75,28 @@ func (m *jwtTokenManager) VerifyRefreshToken(tokenString string) (*domain.Token,
 	}
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
-		sub, err := claims.GetSubject()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token subject", domain.Internal, err)
-		}
-		iat, err := claims.GetIssuedAt()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token iat", domain.Internal, err)
-		}
-		exp, err := claims.GetExpirationTime()
-		if err != nil {
-			return nil, domain.NewDomainError("Error while parsing token exp", domain.Internal, err)
-		}
-		return &domain.Token{
-			Sub: sub,
-			Iat: iat.Unix(),
-			Exp: exp.Unix(),
-		}, nil
+		return m.convertClaims(claims)
 	} else {
 		return nil, domain.NewDomainError("Token is not valid", domain.Internal, err)
 	}
+}
+
+func (m *jwtTokenManager) convertClaims(claims jwt.Claims) (*domain.Token, *domain.DomainError) {
+	sub, err := claims.GetSubject()
+	if err != nil {
+		return nil, domain.NewDomainError("Error while parsing token subject", domain.Internal, err)
+	}
+	iat, err := claims.GetIssuedAt()
+	if err != nil {
+		return nil, domain.NewDomainError("Error while parsing token iat", domain.Internal, err)
+	}
+	exp, err := claims.GetExpirationTime()
+	if err != nil {
+		return nil, domain.NewDomainError("Error while parsing token exp", domain.Internal, err)
+	}
+	return &domain.Token{
+		Sub: sub,
+		Iat: iat.Unix(),
+		Exp: exp.Unix(),
+	}, nil
 }
