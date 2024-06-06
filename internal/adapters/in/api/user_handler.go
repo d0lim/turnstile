@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"strings"
 	"time"
 )
 
@@ -103,4 +104,45 @@ func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
 	c.Cookie(cookie)
 
 	return c.JSON(&dto.LoginResponse{AccessToken: tokenPair.AccessToken})
+}
+
+func (h *UserHandler) Authenticate(c *fiber.Ctx) error {
+	authHeader := c.Get("Authorization")
+	if authHeader == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Missing or malformed JWT",
+		})
+	}
+
+	// The token normally comes as "Bearer <token>"
+	tokenString := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer "))
+	if tokenString == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Malformed JWT",
+		})
+	}
+
+	user, dErr := h.usecase.Authenticate(tokenString, c.Context())
+	if dErr != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": dErr.Error(),
+		})
+	}
+
+	internalUserResponse := &dto.InternalUserResponse{
+		ID:              user.ID,
+		OAuthProvider:   user.OAuthProvider,
+		Email:           user.Email,
+		Name:            user.Name,
+		ProfileImageUrl: user.ProfileImageUrl,
+	}
+
+	marshaled, err := json.Marshal(internalUserResponse)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{})
+	}
+
+	c.Set("X-Auth-User", string(marshaled))
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"authenticated": true})
 }
