@@ -17,7 +17,7 @@ func NewJwtTokenManager(config *config.JwtConfig) token.TokenManager {
 	return &jwtTokenManager{config: config}
 }
 
-func (m *jwtTokenManager) IssueAccessToken(sub string) (string, *domain.DomainError) {
+func (m *jwtTokenManager) IssueAccessToken(sub int64) (string, *domain.DomainError) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": sub,
 		"iat": time.Now().Unix(),
@@ -30,7 +30,7 @@ func (m *jwtTokenManager) IssueAccessToken(sub string) (string, *domain.DomainEr
 	return tokenString, nil
 }
 
-func (m *jwtTokenManager) IssueRefreshToken(sub string) (string, *domain.DomainError) {
+func (m *jwtTokenManager) IssueRefreshToken(sub int64) (string, *domain.DomainError) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": sub,
 		"iat": time.Now().Unix(),
@@ -57,7 +57,7 @@ func (m *jwtTokenManager) VerifyAccessToken(tokenString string) (*domain.Token, 
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
 		return &domain.Token{
-			Sub: claims["sub"].(string),
+			Sub: claims["sub"].(int64),
 			Iat: claims["iat"].(int64),
 			Exp: claims["exp"].(int64),
 		}, nil
@@ -80,7 +80,7 @@ func (m *jwtTokenManager) VerifyRefreshToken(tokenString string) (*domain.Token,
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
 		return &domain.Token{
-			Sub: claims["sub"].(string),
+			Sub: claims["sub"].(int64),
 			Iat: claims["iat"].(int64),
 			Exp: claims["exp"].(int64),
 		}, nil
