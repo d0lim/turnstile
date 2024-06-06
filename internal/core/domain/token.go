@@ -1,7 +1,7 @@
 package domain
 
 type Token struct {
-	Sub string
+	Sub int64
 	Iat int64
 	Exp int64
 }
