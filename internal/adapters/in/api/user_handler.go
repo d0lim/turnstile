@@ -15,33 +15,21 @@ import (
 
 type UserHandler struct {
 	oAuthConfig *config.OAuthConfig
-	session     *config.SessionConfig
 	usecase     *usecase.UserUsecase
 }
 
 func NewUserHandler(
 	oAuthConfig *config.OAuthConfig,
-	session *config.SessionConfig,
 	usecase *usecase.UserUsecase,
 ) *UserHandler {
 	return &UserHandler{
 		oAuthConfig: oAuthConfig,
-		session:     session,
 		usecase:     usecase,
 	}
 }
 
 func (h *UserHandler) GetRedirectLoginGoogle(c *fiber.Ctx) error {
-	session, err := h.session.Store.Get(c)
-	if err != nil {
-		return err
-	}
 	state := uuid.NewString()
-	session.Set("state", state)
-	err = session.Save()
-	if err != nil {
-		return err
-	}
 
 	authCodeURL := h.oAuthConfig.Google.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
@@ -49,16 +37,7 @@ func (h *UserHandler) GetRedirectLoginGoogle(c *fiber.Ctx) error {
 }
 
 func (h *UserHandler) CallbackGoogle(c *fiber.Ctx) error {
-	session, err := h.session.Store.Get(c)
-	if err != nil {
-		return err
-	}
-	state := c.Query("state")
 	code := c.Query("code")
-	savedState := session.Get("state")
-	if savedState != state {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid state")
-	}
 
 	token, err := h.oAuthConfig.Google.Exchange(c.Context(), code)
 	if err != nil {
