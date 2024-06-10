@@ -18,7 +18,6 @@ import (
 func InitializeApp() (*fiber.App, error) {
 	wire.Build(
 		ent.NewClient,
-		config.NewSessionConfig,
 		config.NewOAuthConfig,
 		config.NewJwtConfig,
 		jwt.NewJwtTokenManager,

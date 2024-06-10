@@ -21,7 +21,6 @@ import (
 
 func InitializeApp() (*fiber.App, error) {
 	oAuthConfig := config.NewOAuthConfig()
-	sessionConfig := config.NewSessionConfig()
 	client, err := ent.NewClient()
 	if err != nil {
 		return nil, err
@@ -30,7 +29,7 @@ func InitializeApp() (*fiber.App, error) {
 	jwtConfig := config.NewJwtConfig()
 	tokenManager := jwt.NewJwtTokenManager(jwtConfig)
 	userUsecase := usecase.NewUserUsecase(userRepository, tokenManager)
-	userHandler := api.NewUserHandler(oAuthConfig, sessionConfig, userUsecase)
+	userHandler := api.NewUserHandler(oAuthConfig, userUsecase)
 	app, err := framework.NewApp(userHandler)
 	if err != nil {
 		return nil, err
