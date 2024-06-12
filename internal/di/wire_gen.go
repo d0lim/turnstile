@@ -27,7 +27,8 @@ func InitializeApp() (*fiber.App, error) {
 	}
 	userRepository := db.NewUserRepository(client)
 	jwtConfig := config.NewJwtConfig()
-	tokenManager := jwt.NewJwtTokenManager(jwtConfig)
+	redisConfig := config.NewRedisConfig()
+	tokenManager := jwt.NewJwtTokenManager(jwtConfig, redisConfig)
 	userUsecase := usecase.NewUserUsecase(userRepository, tokenManager)
 	userHandler := api.NewUserHandler(oAuthConfig, userUsecase)
 	app, err := framework.NewApp(userHandler)
