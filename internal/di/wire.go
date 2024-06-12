@@ -20,6 +20,7 @@ func InitializeApp() (*fiber.App, error) {
 		ent.NewClient,
 		config.NewOAuthConfig,
 		config.NewJwtConfig,
+		config.NewRedisConfig,
 		jwt.NewJwtTokenManager,
 		db.NewUserRepository,
 		usecase.NewUserUsecase,
