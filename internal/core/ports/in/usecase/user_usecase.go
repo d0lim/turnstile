@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 	"github.com/d0lim/turnstile/internal/core/ports/out/token"
@@ -69,6 +70,14 @@ func (u *UserUsecase) Authenticate(tokenString string, ctx context.Context) (*do
 }
 
 func (u *UserUsecase) Refresh(refreshTokenString string) (*domain.TokenPair, *domain.DomainError) {
+	reason, domainError := u.manager.GetBlackListReason(refreshTokenString)
+	if domainError != nil {
+		return nil, domainError
+	}
+	if reason != nil {
+		return nil, domain.NewDomainError("Already used refresh token", domain.BadRequest, errors.New("already used refresh token"))
+	}
+
 	verifiedRefreshToken, err := u.manager.VerifyRefreshToken(refreshTokenString)
 	if err != nil {
 		return nil, err
@@ -82,6 +91,10 @@ func (u *UserUsecase) Refresh(refreshTokenString string) (*domain.TokenPair, *do
 	refreshToken, err := u.manager.IssueRefreshToken(userId)
 	if err != nil {
 		return nil, err
+	}
+	domainError = u.manager.AddToRefreshTokenBlackList(refreshTokenString, "refresh")
+	if domainError != nil {
+		return nil, domainError
 	}
 
 	return &domain.TokenPair{
