@@ -11,6 +11,7 @@ const (
 	Unknown ErrorCode = iota
 	NotFound
 	Internal
+	BadRequest
 )
 
 func (e ErrorCode) String() string {
