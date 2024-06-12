@@ -1,20 +1,26 @@
 package jwt
 
 import (
+	"errors"
 	"fmt"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/token"
 	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/redis/go-redis/v9"
 	"time"
 )
 
 type jwtTokenManager struct {
 	config *config.JwtConfig
+	redis  *config.RedisConfig
 }
 
-func NewJwtTokenManager(config *config.JwtConfig) token.TokenManager {
-	return &jwtTokenManager{config: config}
+func NewJwtTokenManager(config *config.JwtConfig, redis *config.RedisConfig) token.TokenManager {
+	return &jwtTokenManager{
+		config: config,
+		redis:  redis,
+	}
 }
 
 func (m *jwtTokenManager) IssueAccessToken(sub string) (string, *domain.DomainError) {
@@ -79,6 +85,29 @@ func (m *jwtTokenManager) VerifyRefreshToken(tokenString string) (*domain.Token,
 	} else {
 		return nil, domain.NewDomainError("Token is not valid", domain.Internal, err)
 	}
+}
+
+func (m *jwtTokenManager) GetBlackListReason(tokenString string) (*string, *domain.DomainError) {
+	prefix := "refresh_token:"
+	reason, err := m.redis.Store.Get(prefix + tokenString)
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return nil, nil
+		}
+		return nil, domain.NewDomainError("Error while fetching black list reason", domain.Internal, err)
+	}
+	reasonStr := string(reason)
+
+	return &reasonStr, nil
+}
+
+func (m *jwtTokenManager) AddToRefreshTokenBlackList(tokenString string, reason string) *domain.DomainError {
+	prefix := "refresh_token:"
+	err := m.redis.Store.Set(prefix+tokenString, []byte(reason), time.Hour*168)
+	if err != nil {
+		return domain.NewDomainError("Error while adding token to blacklist", domain.Internal, err)
+	}
+	return nil
 }
 
 func (m *jwtTokenManager) convertClaims(claims jwt.Claims) (*domain.Token, *domain.DomainError) {
