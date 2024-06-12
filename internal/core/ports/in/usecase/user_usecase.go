@@ -68,6 +68,26 @@ func (u *UserUsecase) Authenticate(tokenString string, ctx context.Context) (*do
 	return user, nil
 }
 
+func (u *UserUsecase) Refresh(refreshTokenString string) (*domain.TokenPair, *domain.DomainError) {
+	verifiedRefreshToken, err := u.manager.VerifyRefreshToken(refreshTokenString)
+	if err != nil {
+		return nil, err
+	}
+	accessToken, err := u.manager.IssueAccessToken(verifiedRefreshToken.Sub)
+	if err != nil {
+		return nil, err
+	}
+	refreshToken, err := u.manager.IssueRefreshToken(verifiedRefreshToken.Sub)
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.TokenPair{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}, nil
+}
+
 func (u *UserUsecase) GetUserByOAuthProviderAndEmailOrCreateIfAbsent(
 	oAuthId string,
 	oAuthProvider string,
