@@ -73,11 +73,13 @@ func (u *UserUsecase) Refresh(refreshTokenString string) (*domain.TokenPair, *do
 	if err != nil {
 		return nil, err
 	}
-	accessToken, err := u.manager.IssueAccessToken(verifiedRefreshToken.Sub)
+
+	userId := verifiedRefreshToken.Sub
+	accessToken, err := u.manager.IssueAccessToken(userId)
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := u.manager.IssueRefreshToken(verifiedRefreshToken.Sub)
+	refreshToken, err := u.manager.IssueRefreshToken(userId)
 	if err != nil {
 		return nil, err
 	}
