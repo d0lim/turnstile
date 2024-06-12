@@ -125,3 +125,32 @@ func (h *UserHandler) Authenticate(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"authenticated": true})
 }
+
+func (h *UserHandler) Refresh(c *fiber.Ctx) error {
+	refreshToken := c.Cookies("refresh_token")
+	if refreshToken == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Missing or malformed JWT",
+		})
+	}
+	tokenPair, domainError := h.usecase.Refresh(refreshToken)
+	if domainError != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": domainError,
+		})
+	}
+
+	cookie := &fiber.Cookie{
+		Name:     "refresh_token",
+		Value:    tokenPair.RefreshToken,
+		Expires:  time.Now().Add(168 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: "None",
+		Path:     "/",
+	}
+
+	c.Cookie(cookie)
+
+	return c.JSON(&dto.LoginResponse{AccessToken: tokenPair.AccessToken})
+}
