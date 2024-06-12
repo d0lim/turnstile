@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
 	"github.com/d0lim/turnstile/internal/core/ports/out/token"
@@ -74,7 +75,8 @@ func (u *UserUsecase) Refresh(refreshTokenString string) (*domain.TokenPair, *do
 	if domainError != nil {
 		return nil, domainError
 	}
-	if reason != nil {
+	if reason != "" {
+		fmt.Println(reason)
 		return nil, domain.NewDomainError("Already used refresh token", domain.BadRequest, errors.New("already used refresh token"))
 	}
 
