@@ -1,13 +1,11 @@
 package jwt
 
 import (
-	"errors"
 	"fmt"
 	"github.com/d0lim/turnstile/internal/core/domain"
 	"github.com/d0lim/turnstile/internal/core/ports/out/token"
 	"github.com/d0lim/turnstile/internal/framework/config"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/redis/go-redis/v9"
 	"time"
 )
 
@@ -87,18 +85,15 @@ func (m *jwtTokenManager) VerifyRefreshToken(tokenString string) (*domain.Token,
 	}
 }
 
-func (m *jwtTokenManager) GetBlackListReason(tokenString string) (*string, *domain.DomainError) {
+func (m *jwtTokenManager) GetBlackListReason(tokenString string) (string, *domain.DomainError) {
 	prefix := "refresh_token:"
 	reason, err := m.redis.Store.Get(prefix + tokenString)
 	if err != nil {
-		if errors.Is(err, redis.Nil) {
-			return nil, nil
-		}
-		return nil, domain.NewDomainError("Error while fetching black list reason", domain.Internal, err)
+		return "", domain.NewDomainError("Error while fetching black list reason", domain.Internal, err)
 	}
 	reasonStr := string(reason)
 
-	return &reasonStr, nil
+	return reasonStr, nil
 }
 
 func (m *jwtTokenManager) AddToRefreshTokenBlackList(tokenString string, reason string) *domain.DomainError {
