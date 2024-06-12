@@ -7,4 +7,5 @@ type TokenManager interface {
 	IssueRefreshToken(sub string) (string, *domain.DomainError)
 	VerifyAccessToken(tokenString string) (*domain.Token, *domain.DomainError)
 	VerifyRefreshToken(tokenString string) (*domain.Token, *domain.DomainError)
+	AddToRefreshTokenBlackList(tokenString string) (*domain.Token, *domain.DomainError)
 }
