@@ -16,6 +16,9 @@ func NewApp(
 }
 
 func SetupRoutes(app *fiber.App, handler *api.UserHandler) {
+	app.Get("/api/v1/ping", func(ctx *fiber.Ctx) error {
+		return ctx.Send([]byte("PONG"))
+	})
 	app.Get("/api/v1/auth/login", handler.GetRedirectLoginGoogle)
 	app.Get("/api/v1/auth/callback", handler.CallbackGoogle)
 	app.Get("/api/v1/auth/authenticate", handler.Authenticate)
