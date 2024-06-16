@@ -13,7 +13,7 @@ RUN update-ca-certificates
 COPY . .
 
 RUN go mod download
-RUN go build -o main wds/cmd/server
+RUN go build -o main ./cmd/server
 
 WORKDIR /dist
 
