@@ -30,8 +30,15 @@ func NewUserHandler(
 
 func (h *UserHandler) GetRedirectLoginGoogle(c *fiber.Ctx) error {
 	state := uuid.NewString()
+	dynamicRedirectUri := c.Query("redirect_uri")
+	if dynamicRedirectUri == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "missing redirect_uri"})
+	}
 
-	authCodeURL := h.oAuthConfig.Google.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	oAuthConfig := *h.oAuthConfig.Google
+	oAuthConfig.RedirectURL = dynamicRedirectUri
+
+	authCodeURL := oAuthConfig.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
 	return c.JSON(&dto.RedirectUriResponse{RedirectUri: authCodeURL})
 }
