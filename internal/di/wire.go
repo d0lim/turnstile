@@ -4,13 +4,12 @@
 package di
 
 import (
-	"github.com/d0lim/turnstile/internal/adapters/in/api"
-	"github.com/d0lim/turnstile/internal/adapters/out/db"
 	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
-	"github.com/d0lim/turnstile/internal/adapters/out/jwt"
-	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
+	"github.com/d0lim/turnstile/internal/controller"
 	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
+	"github.com/d0lim/turnstile/internal/repository"
+	"github.com/d0lim/turnstile/internal/service"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/wire"
 )
@@ -21,10 +20,11 @@ func InitializeApp() (*fiber.App, error) {
 		config.NewOAuthConfig,
 		config.NewJwtConfig,
 		config.NewRedisConfig,
-		jwt.NewJwtTokenManager,
-		db.NewUserRepository,
-		usecase.NewUserUsecase,
-		api.NewUserHandler,
+		repository.NewUserRepository,
+		service.NewTokenService,
+		service.NewUserService,
+		service.NewOauthService,
+		controller.NewUserController,
 		framework.NewApp,
 	)
 
