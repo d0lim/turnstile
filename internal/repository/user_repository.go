@@ -1,23 +1,28 @@
-package db
+package repository
 
 import (
 	"context"
-	"fmt"
 	"github.com/d0lim/turnstile/ent"
 	"github.com/d0lim/turnstile/ent/user"
-	"github.com/d0lim/turnstile/internal/core/domain"
-	"github.com/d0lim/turnstile/internal/core/ports/out/repository"
+	"github.com/d0lim/turnstile/internal/domain"
 )
+
+type UserRepository interface {
+	CreateUser(user *domain.User, ctx context.Context) (*domain.User, error)
+	GetUserByID(id int64, ctx context.Context) (*domain.User, error)
+	GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error)
+	DeleteUser(id int64, ctx context.Context) error
+}
 
 type userRepository struct {
 	client *ent.Client
 }
 
-func NewUserRepository(client *ent.Client) repository.UserRepository {
+func NewUserRepository(client *ent.Client) UserRepository {
 	return &userRepository{client: client}
 }
 
-func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*domain.User, *domain.DomainError) {
+func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*domain.User, error) {
 	u, err := r.client.User.Create().
 		SetOAuthID(user.OAuthId).
 		SetOAuthProvider(user.OAuthProvider).
@@ -26,7 +31,7 @@ func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*do
 		SetNillableProfileImageURL(user.ProfileImageUrl).
 		Save(ctx)
 	if err != nil {
-		return nil, domain.NewDomainError("failed to create user", domain.Internal, err)
+		return nil, err
 	}
 
 	return &domain.User{
@@ -39,13 +44,13 @@ func (r *userRepository) CreateUser(user *domain.User, ctx context.Context) (*do
 	}, nil
 }
 
-func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, *domain.DomainError) {
+func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.User, error) {
 	a, err := r.client.User.Get(ctx, id)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, domain.NewDomainError(fmt.Sprintf("user by id: %d not found", id), domain.NotFound, err)
+			return nil, err
 		}
-		return nil, domain.NewDomainError(fmt.Sprintf("failed to find user by id: %d", id), domain.Internal, err)
+		return nil, err
 	}
 
 	return &domain.User{
@@ -58,13 +63,13 @@ func (r *userRepository) GetUserByID(id int64, ctx context.Context) (*domain.Use
 	}, nil
 }
 
-func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, *domain.DomainError) {
+func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, email string, ctx context.Context) (*domain.User, error) {
 	u, err := r.client.User.Query().Where(user.OAuthProvider(oAuthProvider), user.Email(email)).Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, domain.NewDomainError(fmt.Sprintf("user by oAuthProvider: %s, email: %s", oAuthProvider, email), domain.NotFound, err)
+			return nil, err
 		}
-		return nil, domain.NewDomainError(fmt.Sprintf("failed to find user by oAuthProvider: %s, email: %s", oAuthProvider, email), domain.Internal, err)
+		return nil, err
 	}
 
 	return &domain.User{
@@ -77,7 +82,7 @@ func (r *userRepository) GetUserByOAuthProviderAndEmail(oAuthProvider string, em
 	}, nil
 }
 
-func (r *userRepository) DeleteUser(id int64, ctx context.Context) *domain.DomainError {
+func (r *userRepository) DeleteUser(id int64, ctx context.Context) error {
 	err := r.client.User.DeleteOneID(id).Exec(ctx)
-	return domain.NewDomainError("failed to delete user", domain.Internal, err)
+	return err
 }
