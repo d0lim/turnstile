@@ -4,7 +4,6 @@
 package di
 
 import (
-	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
 	"github.com/d0lim/turnstile/internal/controller"
 	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
@@ -16,7 +15,7 @@ import (
 
 func InitializeApp() (*fiber.App, error) {
 	wire.Build(
-		ent.NewClient,
+		config.NewDbClient,
 		config.NewOAuthConfig,
 		config.NewJwtConfig,
 		config.NewRedisConfig,
