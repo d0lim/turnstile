@@ -7,13 +7,12 @@
 package di
 
 import (
-	"github.com/d0lim/turnstile/internal/adapters/in/api"
-	"github.com/d0lim/turnstile/internal/adapters/out/db"
 	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
-	"github.com/d0lim/turnstile/internal/adapters/out/jwt"
-	"github.com/d0lim/turnstile/internal/core/ports/in/usecase"
+	"github.com/d0lim/turnstile/internal/controller"
 	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
+	"github.com/d0lim/turnstile/internal/repository"
+	"github.com/d0lim/turnstile/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,17 +20,18 @@ import (
 
 func InitializeApp() (*fiber.App, error) {
 	oAuthConfig := config.NewOAuthConfig()
+	oauthService := service.NewOauthService(oAuthConfig)
 	client, err := ent.NewClient()
 	if err != nil {
 		return nil, err
 	}
-	userRepository := db.NewUserRepository(client)
+	userRepository := repository.NewUserRepository(client)
 	jwtConfig := config.NewJwtConfig()
 	redisConfig := config.NewRedisConfig()
-	tokenManager := jwt.NewJwtTokenManager(jwtConfig, redisConfig)
-	userUsecase := usecase.NewUserUsecase(userRepository, tokenManager)
-	userHandler := api.NewUserHandler(oAuthConfig, userUsecase)
-	app, err := framework.NewApp(userHandler)
+	tokenService := service.NewTokenService(jwtConfig, redisConfig)
+	userService := service.NewUserService(userRepository, tokenService)
+	userController := controller.NewUserController(oauthService, userService)
+	app, err := framework.NewApp(userController)
 	if err != nil {
 		return nil, err
 	}
