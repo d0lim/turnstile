@@ -7,7 +7,6 @@
 package di
 
 import (
-	"github.com/d0lim/turnstile/internal/adapters/out/db/ent"
 	"github.com/d0lim/turnstile/internal/controller"
 	"github.com/d0lim/turnstile/internal/framework"
 	"github.com/d0lim/turnstile/internal/framework/config"
@@ -21,7 +20,7 @@ import (
 func InitializeApp() (*fiber.App, error) {
 	oAuthConfig := config.NewOAuthConfig()
 	oauthService := service.NewOauthService(oAuthConfig)
-	client, err := ent.NewClient()
+	client, err := config.NewDbClient()
 	if err != nil {
 		return nil, err
 	}

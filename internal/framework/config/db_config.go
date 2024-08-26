@@ -1,4 +1,4 @@
-package ent
+package config
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func NewClient() (*ent.Client, error) {
+func NewDbClient() (*ent.Client, error) {
 	dataSourceName := os.Getenv("DB_CONNECTION_STRING")
 
 	drv, err := sql.Open(dialect.Postgres, dataSourceName)
